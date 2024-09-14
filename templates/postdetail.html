@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<main class="2xl:ml-[--w-side]  xl:ml-[--w-side-md] md:ml-[--w-side-small]">
+
+    <!-- post preview modal --> 
+    <div class="hidden lg:p-20 max-lg:!items-start uk-modal uk-open" id="product_modal" uk-modal="" tabindex="-1" style="overscroll-behavior: contain; display: block;">
+        
+        <div class="uk-modal-dialog tt relative mx-auto overflow-hidden shadow-xl rounded-lg lg:flex items-center ax-w-[86rem] w-full lg:h-[80vh]">
+          
+            <!-- image previewer -->
+            <div class="lg:h-full lg:w-[calc(100vw-400px)] w-full h-96 flex justify-center items-center relative">
+                
+                <div class="relative z-10 bg-green-300 w-full h-full">
+                    <img src="{{post.picture.url}}" alt="" class="object-scale-down h-full w-full absolute" >
+                </div>
+  
+                <!-- close button -->
+                <button onclick="goBack()" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 uk-animation-slide-right-medium z-10 dark:bg-slate-600 uk-modal-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+
+            </div>
+
+            <!-- right sidebar -->
+            <div class="lg:w-[400px] w-full bg-white h-full relative  overflow-y-auto shadow-xl dark:bg-dark2 flex flex-col justify-between" style="overscroll-behavior: contain;">
+                
+                <div class="p-5 pb-0">
+
+                    <!-- story heading -->
+                    <div class="flex gap-3 text-sm font-medium">
+                        <img src="{{post.user.profile.image.url}}" alt="" class="w-9 h-9 rounded-full">
+                        <div class="flex-1">
+                            <h4 class="text-black font-medium dark:text-white"> {{post.user.username}} </h4>
+                            <div class="text-gray-500 text-xs dark:text-white/80">{{post.posted| date:"d M,Y"}} </div>
+                        </div>
+ 
+                        <!-- dropdown -->
+                        <div class="-m-1">
+                            <button type="button" class="button__ico w-8 h-8" aria-haspopup="true" aria-expanded="false"> <ion-icon class="text-xl md hydrated" name="ellipsis-horizontal" role="img" aria-label="ellipsis horizontal"></ion-icon> </button>
+                            <div class="w-[253px] uk-dropdown" uk-dropdown="pos: bottom-right; animation: uk-animation-scale-up uk-transform-origin-top-right; animate-out: true"> 
+                                <nav> 
+                                    <a href="{% url 'favourite2' post.id %}"> <ion-icon class="text-xl shrink-0 md hydrated" name="bookmark-outline" role="img" aria-label="bookmark outline"></ion-icon>  Add to favorites </a>  
+                                    <a href="#"> <ion-icon class="text-xl shrink-0 md hydrated" name="flag-outline" role="img" aria-label="flag outline"></ion-icon>  Report this post </a>  
+                                    <a href="#"> <ion-icon class="text-xl shrink-0 md hydrated" name="share-outline" role="img" aria-label="share outline"></ion-icon>  Share your profile </a>  
+                                    {% if post.user == request.user %}
+
+                                        <a href="{% url 'update_post' post.id %}"> <ion-icon class="text-xl shrink-0 md hydrated" name="create-outline" role="img" aria-label="create"></ion-icon> Update Post </a>  
+                                        <a href="{% url 'delete_post' post.id %}">  <ion-icon class="text-xl shrink-0 md hydrated" name="trash" role="img" aria-label="trash"></ion-icon>Delete Post </a>  
+                                        {% endif %}
+                                        <hr>
+                                    <a href="#" class="text-red-400 hover:!bg-red-50 dark:hover:!bg-red-500/50"> <ion-icon class="text-xl shrink-0 md hydrated" name="stop-circle-outline" role="img" aria-label="stop circle outline"></ion-icon>  Unfollow </a>  
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="font-normal text-sm leading-6 mt-4">{{post.caption}} </p>
+                    {% for tag in post.tags.all %}
+                        <a href="{{tag.get_absolute_url}}" class=" font-normal text-sm leading-6 mt-4 text-blue-600 dark:text-blue-500 hover:underline" >#{{tag}} </a>
+                    {% endfor %}
+                    <div class="shadow relative -mx-5 px-5 py-3 mt-3">
+                        <div class="flex items-center gap-4 text-xs font-semibold">
+                          
+                            <div class="flex items-center gap-2.5" tabindex="0" aria-haspopup="true" aria-expanded="false">
+                                <a href="{% url 'postlike' post.id %}" class="button-icon {% if liked %}text-red-500 bg-red-100{% else %}text-gray-500 bg-gray-100{% endif %}">
+                                    <ion-icon class="text-lg md hydrated" name="heart" role="img" aria-label="heart"></ion-icon>
+                                </a>
+                                <p>{{ post.likes }}</p>
+                            </div>
+                            
+                            <div class="flex items-center gap-3">
+                                <button type="button" class="button__ico bg-slate-100 dark:bg-slate-700"> <ion-icon class="text-lg md hydrated" name="chatbubble-ellipses" role="img" aria-label="chatbubble ellipses"></ion-icon> </button>
+                                <span>260</span>
+                            </div>
+                            <button type="button" class="button__ico ml-auto"> <ion-icon class="text-xl md hydrated" name="share-outline" role="img" aria-label="share outline"></ion-icon> </button>
+                            <button type="button" class="button__ico"> <ion-icon class="text-xl md hydrated" name="bookmark-outline" role="img" aria-label="bookmark outline"></ion-icon> </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="p-5 h-full overflow-y-auto flex-1" style="overscroll-behavior: contain;">
+
+                    <!-- comment list -->
+                     
+                    <div class="relative text-sm font-medium space-y-5"> 
+                        {% if comments %}
+
+                            {% for comment in comments %}
+                            <div class="flex items-start gap-3 relative">
+                                <img src="{% if comment.user.profile.image %}{{comment.user.profile.image.url}}{% else %}{% static 'assets/profile.png' %} {% endif %}" alt="" class="w-6 h-6 mt-1 rounded-full">
+                                <div class="flex-1">
+                                    <a href="#" class="text-black font-medium inline-block dark:text-white"> {{ comment.user.username }} </a>
+                                    <p class="mt-0.5">{{ comment.body }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                        <p class="text-gray-600 mt-4">No comments yet. Be the first to comment!</p>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <form method="POST" class="bg-white p-3 text-sm font-medium flex items-center gap-2">
+                    {% csrf_token %}
+                    <img src="{% if request.user.profile.image %}{{request.user.profile.image.url}}{% else %}{% static 'assets/profile.png' %}{% endif %} " alt="" class="w-6 h-6 rounded-full">
+                    
+                    <div class="flex-1 relative overflow-hidden ">
+                        {{form.body}}
+                       
+
+                    </div>
+                    
+                    <button type="submit" class=" text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Replay</button>
+                
+                </form>
+
+            </div>
+   
+        </div>
+        
+    </div>
+</div>
+{% if request.resolver_match.url_name == 'delete_post' and post.id == request.resolver_match.kwargs.post_id %}
+    <div class="lg:p-20 p-10 uk-modal uk-open" id="modal" uk-modal="" tabindex="-1" style="overscroll-behavior: contain; display: block;">
+
+        <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
+
+            <div class="p-6">
+                <h2 class="text-xl font-semibold">Headline</h2>
+            </div>
+
+            <div class="p-6 py-0">
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing e ab  eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            
+            </div>                                           
+            
+            <div class="flex justify-end p-6 text-sm font-medium">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <a href="{% url 'postdetail' post.id %}" class="px-4 py-1.5 rounded-md uk-modal-close" >Cancel</a>
+                    <button class="button bg-pink-100 text-pink-600 border border-pink-200" type="submit">Delete</button>
+                </form>
+            </div> 
+
+            <!-- close button -->
+            <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        
+        </div>
+
+    </div>
+    
+{% endif %}
+
+<script>
+    function goBack() {
+        window.history.back();
+    }
+    </script>
+{% endblock  %}
+ 

@@ -1,0 +1,301 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block content %}
+   
+        <!-- main contents -->
+        <main class="2xl:ml-[--w-side] xl:ml-[--w-side-md] md:ml-[--w-side-small]">
+
+            <div class="main__inner">
+  
+                <!-- Stories section -->
+                <div>
+                    <h3 class="font-extrabold text-2xl text-black dark:text-white">Stories</h3>
+                    <div class="relative" tabindex="-1">
+                        <div class="py-5 uk-slider-container">
+                            <ul class="uk-slider-items w-[calc(100%+14px)]">
+                                <!-- Add new status button -->
+                                <li class="md:pr-3">
+                                    <a href="{% url 'newstatus' %}" class="md:w-20 md:h-20 w-12 h-12 rounded-full relative border-2 border-dashed grid place-items-center bg-slate-200 border-slate-300 dark:border-slate-700 dark:bg-dark2">
+                                        <ion-icon name="camera" class="text-2xl"></ion-icon>
+                                    </a>
+                                </li>
+                                <li class="md:pr-2.5 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                    <a href="{% url 'profile_status' user.id %}" class="status-avatar" data-user-id="{{ user.id }}">
+                                        <div class="md:w-20 md:h-20 w-12 h-12  white-grad relative md:border-4  rounded-full overflow-hidden dark:border-slate-700" style=>
+                                            {% if user.profile.image %}
+                                                <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="absolute w-full h-full object-cover">
+                                            {% else %}
+                                                <img src="{% static 'images/default_profile.png' %}" alt="{{ user.username }}" class="absolute w-full h-full object-cover">
+                                            {% endif %}
+                                        </div>
+                                        <span class="text-xs mt-1 text-center block">Your Story</span>
+                                    </a>
+                                </li>
+                                <!-- User status images -->
+                                {% for user, statuses in user_statuses.items %}
+                                    <li class="md:pr-2.5 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                        <a href="{% url 'user_status' user.id %}" class="status-avatar" data-user-id="{{ user.id }}">
+                                            <div class="md:w-20 md:h-20 w-12 h-12  white-grad relative md:border-4  rounded-full overflow-hidden dark:border-slate-700" style=>
+                                                {% if user.profile.image %}
+                                                    <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="absolute w-full h-full object-cover">
+                                                {% else %}
+                                                    <img src="{% static 'images/default_profile.png' %}" alt="{{ user.username }}" class="absolute w-full h-full object-cover">
+                                                {% endif %}
+                                            </div>
+                                            <span class="text-xs mt-1 text-center block">{{ user.username }}</span>
+                                        </a>
+                                    </li>
+                                     
+                                {% endfor %}
+                                        
+                                       
+                                    
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex max-lg:flex-col xl:gap-10 md:gap-3 md:mt-10" id="js-oversized">
+                    
+                   
+                    <!-- feed story -->
+                    <div class="md:max-w-[510px] mx-auto flex-1 xl:space-y-6 space-y-3">
+ 
+
+                        {% for post in post_items %}
+                        <!--  post image-->
+                        <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2">
+
+                            <!-- post heading -->
+                            <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
+                                <a href="{% url 'profile' post.user.username %}"> <img src="{{post.user.profile.image.url}}" alt="" class="w-9 h-9 rounded-full"> </a>  
+                                <div class="flex-1">
+                                    <a href="{% url 'profile' post.user.username %}"> <h4 class="text-black dark:text-white">{{post.user.username}}</h4> </a>  
+                                    <div class="text-xs text-gray-500 dark:text-white/80"> {{post.posted|date:"d M,Y"}}</div>
+                                </div>
+
+                                <div class="-mr-1">
+                                    <button type="button" class="button__ico w-8 h-8"> <ion-icon class="text-xl" name="ellipsis-horizontal"></ion-icon> </button>
+                                    <div  class="w-[245px]" uk-dropdown="pos: bottom-right; animation: uk-animation-scale-up uk-transform-origin-top-right; animate-out: true; mode: click"> 
+                                        <nav> 
+                                            <a href="{% url 'favourite2' post.id %}"> <ion-icon class="text-xl shrink-0" name="bookmark-outline"></ion-icon>  Add to favorites </a>  
+                                            <a href="#"> <ion-icon class="text-xl shrink-0" name="notifications-off-outline"></ion-icon> Mute Notification </a>  
+                                            <a href="#"> <ion-icon class="text-xl shrink-0" name="flag-outline"></ion-icon>  Report this post </a>  
+                                            <a href="#"> <ion-icon class="text-xl shrink-0" name="share-outline"></ion-icon>  Share your profile </a>  
+                                            <hr>
+                                            <a href="{% url 'follow' post.user 0 %}" class="text-red-400 hover:!bg-red-50 dark:hover:!bg-red-500/50"> <ion-icon class="text-xl shrink-0" name="stop-circle-outline"></ion-icon>  Unfollow </a>  
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- post image -->
+                            <a href="{% url 'postdetail' post.id %}"  aria-expanded="false">
+                            <div class="relative w-full lg:h-76 h-full sm:px-4 ">
+                                <img src="{{post.picture.url}}" alt="" class="sm:rounded-lg w-full h-full object-cover ">
+                            </div>
+                            </a>
+
+                            <!-- post icons -->
+                            <div class="sm:p-4 p-2.5 flex items-center gap-4 text-xs font-semibold">
+                                <div class="flex items-center gap-2.5">
+                                    <a href="{% url 'postlike' post.id %}"  class="button__ico text-red-500 bg-red-100 dark:bg-slate-700"> <ion-icon class="text-lg" name="heart"></ion-icon> </a>
+                                    {{ post.likes }}
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <a href="{% url 'postlike' post.id %}"  class="button__ico bg-slate-200/70 dark:bg-slate-700"> <ion-icon class="text-lg" name="chatbubble-ellipses"></ion-icon> </a>
+                                    <span>{{ post.Comments.count}}</span>
+                                </div>
+                                <button type="button" class="button__ico ml-auto"> <ion-icon class="text-xl" name="paper-plane-outline"></ion-icon> </button>
+                                <button type="button" class="button__ico"> <ion-icon class="text-xl" name="share-outline"></ion-icon> </button>
+                                
+                            </div>
+                            
+                            <!-- comments -->
+                            <div class="sm:p-4 p-2.5 border-t border-gray-100 font-normal space-y-3 relative dark:border-slate-700/40"> 
+                                <div class="sm:p-1 pl-2.5 flex items-center" style="position:relative;top:-10px">
+                                    <b><a href="{% url 'profile' post.user.username %}"class="mt-7 pr-1"> {{post.user.username}} </a></b>
+                                    <p class="font-normal"> {{post.caption}} </p>
+                                </div>
+                                <div style="position:relative;top:-12px;">
+                                    {% for tag in post.tags.all %}
+                                        <a href="{{tag.get_absolute_url}}" class="mt-3 pr-1 font-medium text-blue-600 dark:text-blue-500 hover:underline" >#{{tag}}</a>
+                                    {% endfor %}
+                                </div>
+                                <button class="flex items-center gap-1.5 text-gray-500 hover:text-blue-500 mt-2">
+                                    <ion-icon name="chevron-down-outline" class="ml-auto duration-200 group-aria-expanded:rotate-180"></ion-icon>
+                                    <a href="{% url 'postdetail' post.id %}" >More Comment</a>
+                                </button>
+
+                            </div>
+                            
+                            <!-- add comment -->
+                            <form method="POST" class="sm:px-4 sm:py-3 p-2.5 border-t border-gray-100 flex items-center gap-1 dark:border-slate-700/40">
+                                {% csrf_token %}
+                                <img src="{% if profile.image %}{{profile.image.url}}{% else %}{% static 'assets/profile.png' %}{% endif %}" alt="" class="w-6 h-6 rounded-full">
+                                
+                                <div class="flex-1 relative overflow-hidden h-10">
+                                    {{form.body}}  
+                                    <input type="hidden" name="post_id" value="{{ post.id }}">         
+                                    <div class="!top-2 pr-2 uk-drop" uk-drop="pos: bottom-right; mode: click">
+                                        <div class="flex items-center gap-2" uk-scrollspy="target: > svg; cls: uk-animation-slide-right-small; delay: 100 ;repeat: true">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 fill-sky-600" style="opacity: 0;">
+                                                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 fill-pink-600" style="opacity: 0;">
+                                                <path d="M3.25 4A2.25 2.25 0 001 6.25v7.5A2.25 2.25 0 003.25 16h7.5A2.25 2.25 0 0013 13.75v-7.5A2.25 2.25 0 0010.75 4h-7.5zM19 4.75a.75.75 0 00-1.28-.53l-3 3a.75.75 0 00-.22.53v4.5c0 .199.079.39.22.53l3 3a.75.75 0 001.28-.53V4.75z"></path>
+                                            </svg>
+                                        </div>
+                                    </div> 
+                                    
+                                </div>
+                                
+    
+                                <button type="submit" class="text-sm rounded-full py-1.5 px-3.5 bg-secondery"> Replay</button>
+                            </form> 
+
+                        </div>
+                        {% endfor %}
+
+
+
+
+                        <!-- placeholder -->
+                        <div class="rounded-xl shadow-sm p-4 space-y-4 bg-slate-200/40 animate-pulse border1 dark:bg-dark2">
+
+                            <div class="flex gap-3">
+                                <div class="w-9 h-9 rounded-full bg-slate-300/20"></div>
+                                <div class="flex-1 space-y-3">
+                                    <div class="w-40 h-5 rounded-md bg-slate-300/20"></div>
+                                    <div class="w-24 h-4 rounded-md bg-slate-300/20"></div>
+                                </div>
+                                <div class="w-6 h-6 rounded-full bg-slate-300/20"></div>
+                            </div>
+
+                            <div class="w-full h-52 rounded-lg bg-slate-300/10 my-3"> </div>
+
+                            <div class="flex gap-3">
+
+                                <div class="w-16 h-5 rounded-md bg-slate-300/20"></div>
+
+                                <div class="w-14 h-5 rounded-md bg-slate-300/20"></div>
+
+                                <div class="w-6 h-6 rounded-full bg-slate-300/20 ml-auto"></div>
+                                <div class="w-6 h-6 rounded-full bg-slate-300/20  "></div>
+                            </div>
+
+                        </div>
+                       
+
+                    </div> 
+
+
+                    <!-- right sidebar -->
+                    <div class="lg:max-w-[370px] md:max-w-[510px] mx-auto">
+
+                        <div class="xl:space-y-6 space-y-3 md:pb-12"  uk-sticky="end: #js-oversized; offset: 50; media:992">
+
+                            <!-- peaple you might know -->
+                            <div class="bg-white rounded-xl shadow-sm p-5 px-6 border1 dark:bg-dark2">
+                                
+                                <div class="flex justify-between text-black dark:text-white">
+                                    <h3 class="font-bold text-base"> Peaple You might know </h3>
+                                    <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
+                                </div>
+    
+                                <div class="space-y-4 capitalize text-xs font-normal mt-5 mb-2 text-gray-500 dark:text-white/80">
+    
+                                    {% for user in all_users %}
+                                    {% if request.user.username != user.username %}
+                                    <div class="flex items-center gap-3">
+                                        <a href="{% url 'profile' user %}">
+                                            <img src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}{% static 'assets/profile.png' %}{% endif %}" alt="" class="bg-gray-200 rounded-full w-10 h-10">
+                                        </a>
+                                        <div class="flex-1">
+                                            <a href="{% url 'profile' user %}"><h4 class="font-semibold text-sm text-black dark:text-white">  {{user.profile.first_name|title}} {{user.profile.last_name|title}}</h4></a>
+                                            <div class="mt-0.5"> Suggested For You </div>
+                                        </div>
+                                        {% if follow_status %}
+                                        <a href="{% url 'follow' user 0 %}" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery">Unfollow</a>
+                                        {% else %}
+                                        <a href="{% url 'follow' user 1 %}" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery" > Follow</a>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+    
+                            </div>
+    
+
+
+                            
+                            <!-- online friends -->
+                            {% comment %} <div class="bg-white rounded-xl shadow-sm p-5 px-6 border1 dark:bg-dark2">
+                                
+                                <div class="flex justify-between text-black dark:text-white">
+                                    <h3 class="font-bold text-base"> Online Friends </h3>
+                                    <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
+                                </div>
+
+                                <div class="grid grid-cols-6 gap-3 mt-4">
+
+                                    <a href="profile.html"> 
+                                        <div class="w-10 h-10 relative">
+                                            <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                            <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                        </div> 
+                                    </a>
+                                    <a href="profile.html"> 
+                                        <div class="w-10 h-10 relative">
+                                            <img src="assets/images/avatars/avatar-3.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                            <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                        </div>
+                                    </a>
+                                    <a href="profile.html">  
+                                        <div class="w-10 h-10 relative">
+                                            <img src="assets/images/avatars/avatar-4.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                            <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                        </div> 
+                                    </a>
+                                    <a href="profile.html"> 
+                                        <div class="w-10 h-10 relative">
+                                            <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                            <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                        </div> 
+                                    </a>
+                                    <a href="profile.html"> 
+                                        <div class="w-10 h-10 relative">
+                                            <img src="assets/images/avatars/avatar-6.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                            <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                        </div> 
+                                    </a>
+                                    <a href="profile.html"> 
+                                        <div class="w-10 h-10 relative">
+                                            <img src="assets/images/avatars/avatar-7.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
+                                            <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
+                                        </div> 
+                                    </a>
+
+                                </div>
+
+                                
+                            </div> {% endcomment %}
+
+
+
+                        </div>
+
+                    </div>  
+
+
+                </div> 
+
+            </div> 
+
+        </main>
+{% endblock  %}
+ 

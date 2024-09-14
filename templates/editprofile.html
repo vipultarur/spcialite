@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load static %}
+    
+{% block content %}
+<main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-2.5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
+
+    <div class="max-w-3xl mx-auto">
+
+
+        <form method="post" enctype="multipart/form-data" class="box relative rounded-lg shadow-md">
+            {% csrf_token %}
+
+            <div class="flex md:gap-8 gap-4 items-center md:p-8 p-6 md:pb-4">
+
+
+                <div class="relative  shrink-0" style="width:200px;"> 
+
+                    <label for="file" class="cursor-pointer">
+                        <img id="img" src="{% if user.profile.image %}{{user.profile.image.url}}{% else %}{% static 'assets/profile.png' %}{% endif %}" class="object-cover w-full h-full rounded-full" alt="">
+                        <input type="file" id="file" class="hidden">
+                    </label>
+
+                </div>
+
+                <div class="flex items-center justify-center w-full">
+                    <label for="image" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                            </svg>
+                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                        </div>
+                        <input id="image" name="image" type="file" class="hidden" />
+                    </label>
+                </div> 
+            </div>
+
+            <!-- nav tabs -->
+            <div class="relative border-b uk-slider" tabindex="-1" uk-slider="finite: true">
+
+                <nav class="uk-slider-container overflow-hidden nav__underline px-6 p-0 border-transparent -mb-px">
+    
+                    <ul class="uk-slider-items w-[calc(100%+10px)] !overflow-hidden" uk-switcher="connect: #setting_tab ; animation: uk-animation-slide-right-medium, uk-animation-slide-left-medium" style="transform: translate3d(0px, 0px, 0px);"> 
+                        
+                        <li class="w-auto pr-2.5 uk-active" tabindex="-1"> <a href="#" aria-expanded="true"> Setting </a> </li>
+                        
+                    </ul>
+                
+                </nav>
+                        
+                <a class="absolute -translate-y-1/2 top-1/2 left-0 flex items-center w-20 h-full p-2 py-1 justify-start bg-gradient-to-r from-white via-white dark:from-slate-800 dark:via-slate-800 uk-invisible" href="#" uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-2xl ml-1 md hydrated" role="img" aria-label="chevron back"></ion-icon> </a>
+                <a class="absolute right-0 -translate-y-1/2 top-1/2 flex items-center w-20 h-full p-2 py-1 justify-end bg-gradient-to-l from-white via-white dark:from-slate-800 dark:via-slate-800" href="#" uk-slider-item="next">  <ion-icon name="chevron-forward" class="text-2xl mr-1 md hydrated" role="img" aria-label="chevron forward"></ion-icon> </a>
+        
+            </div> 
+
+
+            <div id="setting_tab" class="uk-switcher md:py-12 md:px-20 p-6 overflow-hidden text-black text-sm" style="touch-action: pan-y pinch-zoom;"> 
+                
+
+                <!-- tab user basic info -->
+                <div class="uk-active" style="">
+
+                    <div>
+                        
+                        <div class="space-y-6">
+
+                            <div class="flex">
+                                <div class="md:flex items-center gap-10">
+                                    <label for="first_name" class="md:w-22 text-right font-medium">First Name</label>
+                                    <div class="flex-1">
+                                        <input type="text" name="first_name" value="{{ form.first_name.value }}" placeholder="First Name" class="w-full lg:w-1/2 border border-gray-300 rounded p-2">
+                                    </div>
+                                </div> 
+                                <div class="md:flex items-center gap-10">
+                                    <label for="last_name"   class="md:w-32 text-right"> Last Name </label>
+                                    <div class="flex-1 max-md:mt-4">
+                                        <input type="text" name="last_name" value="{{ form.last_name.value }}" placeholder="Last Name"   class="w-full">
+                                    </div>
+                                </div> 
+                            </div>
+    
+                            <div class="md:flex items-start gap-10">
+                                <label for="bio" class="md:w-32 text-right font-medium">Bio</label>
+                                <div class="flex-1">
+                                    <input type="text" name="bio" value="{{ form.bio.value }}" placeholder="Bio" class="w-full lg:w-1/2 border border-gray-300 rounded p-2">
+                                </div>
+                            </div> 
+                            <div class="md:flex items-center gap-10 mb-6">
+                                <label for="url" class="md:w-32 text-right font-medium">URL</label>
+                                <div class="flex-1">
+                                    <input type="text" name="url" value="{{ form.url.value }}" placeholder="URL" class="w-full lg:w-1/2 border border-gray-300 rounded p-2">
+                                </div>
+                            </div>
+                            
+                            <div class="md:flex items-center gap-10 mb-6">
+                                <label for="location" class="md:w-32 text-right font-medium">Location</label>
+                                <div class="flex-1">
+                                    <input type="text" name="location" value="{{ form.location.value }}" placeholder="Location" class="w-full lg:w-1/2 border border-gray-300 rounded p-2">
+                                </div>
+                            </div>
+                            
+                           
+
+                        </div>
+
+                        <div class="flex items-center gap-4 mt-16 lg:pl-[10.5rem]">
+                            <button type="submit" class="button lg:px-6 bg-secondery max-md:flex-1"> Cancle</button>
+                            <button type="submit" class="button lg:px-10 bg-primary text-white max-md:flex-1"> Update <span class="ripple-overlay"></span></button>
+                        </div>
+                        
+                    </div> 
+
+                </div>
+
+
+
+            </div>
+            
+        
+        </form>
+
+        
+    </div>
+    
+</main>
+{% endblock%}

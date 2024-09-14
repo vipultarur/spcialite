@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+    
+
+{% block content %}
+<main class="2xl:ml-[--w-side] xl:ml-[--w-side-md] md:ml-[--w-side-small]">
+
+    <div class="main__inner pt-6">
+         
+        <!-- heading title -->
+        <div class="page__heading">
+            <a href="#">
+                <ion-icon name="chevron-back-outline" role="img" class="md hydrated" aria-label="chevron back outline"></ion-icon> Back
+            </a>
+            <h1> Reels</h1>
+        </div>
+
+        <!-- category list -->
+        <div class="relative uk-slider" tabindex="-1" uk-slider="finite: true">
+
+            <div class="py-4 overflow-hidden uk-slider-container">
+
+                <ul class="-ml-2 uk-slider-items w-[calc(100%+0.10px)] capitalize text-sm font-semibold" style="transform: translate3d(0px, 0px, 0px);">
+                    <li class="w-auto pr-2.5 uk-active" tabindex="-1"> <a href="#" class="px-4 py-2 rounded-lg bg-white border inline-block hover:shadow dark:bg-dark2 dark:border-slate-700"> Top </a> </li>
+                    <li class="w-auto pr-2.5 uk-active" tabindex="-1"> <a href="#" class="px-4 py-2 rounded-lg bg-white border inline-block hover:shadow dark:bg-dark2 dark:border-slate-700"> headphones </a> </li>
+                    <li class="w-auto pr-2.5 uk-active" tabindex="-1"> <a href="#" class="px-4 py-2 rounded-lg bg-white border inline-block hover:shadow dark:bg-dark2 dark:border-slate-700"> Parfums </a> </li>
+                    <li class="w-auto pr-2.5 uk-active" tabindex="-1"> <a href="#" class="px-4 py-2 rounded-lg bg-white border inline-block hover:shadow dark:bg-dark2 dark:border-slate-700"> Fruits </a> </li>
+                    <li class="w-auto pr-2.5 uk-active" tabindex="-1"> <a href="#" class="px-4 py-2 rounded-lg bg-white border inline-block hover:shadow dark:bg-dark2 dark:border-slate-700"> Gaming </a> </li>
+                    <li class="w-auto pr-2.5 uk-active" tabindex="-1"> <a href="#" class="px-4 py-2 rounded-lg bg-white border inline-block hover:shadow dark:bg-dark2 dark:border-slate-700"> Mobiles </a> </li>
+                    <li class="w-auto pr-2.5 uk-active" tabindex="-1"> <a href="#" class="px-4 py-2 rounded-lg bg-white border inline-block hover:shadow dark:bg-dark2 dark:border-slate-700"> Laptops </a> </li>
+                    <li class="w-auto pr-2.5 uk-active" tabindex="-1"> <a href="#" class="px-4 py-2 rounded-lg bg-white border inline-block hover:shadow dark:bg-dark2 dark:border-slate-700"> Gaming </a> </li>
+                    <li class="w-auto pr-2.5 uk-active" tabindex="-1"> <a href="#" class="px-4 py-2 rounded-lg bg-white border inline-block hover:shadow dark:bg-dark2 dark:border-slate-700"> headphones </a> </li>
+                    <li class="w-auto pr-2.5" tabindex="-1"> <a href="#" class="px-4 py-2 rounded-lg bg-white border inline-block hover:shadow dark:bg-dark2 dark:border-slate-700"> Parfums </a> </li>
+                    <li class="w-auto pr-2.5" tabindex="-1"> <a href="#" class="px-4 py-2 rounded-lg bg-white border inline-block hover:shadow dark:bg-dark2 dark:border-slate-700"> Fruits </a> </li>
+                </ul>
+            
+            </div>
+                    
+            <a class="absolute left-0 -translate-y-1/2 top-1/2 flex items-center w-16 h-12 p-2.5 justify-start bg-gradient-to-r from-[#f6f9fb] via-[#f6f9fb] dark:from-slate-900 dark:via-slate-900 uk-invisible" href="#" uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-2xl md hydrated" role="img" aria-label="chevron back"></ion-icon> </a>
+            <a class="absolute right-0 -translate-y-1/2 top-1/2 flex items-center w-16 h-12 p-2.5 justify-end bg-gradient-to-l from-[#f6f9fb] via-[#f6f9fb] dark:from-slate-900 dark:via-slate-900" href="#" uk-slider-item="next">  <ion-icon name="chevron-forward" class="text-2xl md hydrated" role="img" aria-label="chevron forward"></ion-icon> </a>
+
+        </div>
+
+        <div class="mt-8">
+
+             <!-- post heading -->
+             <div class="flex items-center justify-between py-3">
+                <h1 class="text-xl font-bold text-black dark:text-white">You may like</h1>
+
+                <a href="#" class="text-sm font-semibold flex items-center gap-2">
+                    Show acheived  <ion-icon name="chevron-forward-outline" role="img" class="md hydrated" aria-label="chevron forward outline"></ion-icon> 
+                </a>
+            </div>
+            
+            <div class="grid gap-3 lg:gap-4 lg:grid-cols-4 md:grid-cols-5 sm:grid-cols-3 grid-cols-2" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100;repeat:true">
+
+                <!-- single reels -->
+                {% for reel in reel_items %}
+                    <a href="{% url 'reeldetail' reel.id %}">
+                        <div class="relative w-full lg:h-[280px] aspect-[2.5/4] overflow-hidden rounded-lg shrink-0 uk-transition-toggle">
+                            <!-- Show reel video thumbnail or an image -->
+                            <img class="object-cover w-full h-full" src="{{reel.thumbnail.url}}" alt="{{ reel.thumbnail }}">
+                            
+                            <img src="{% static 'assets/images/icon-play.svg' %}" alt="Play" class="w-12 h-12 absolute z-10 top-1/2 left-1/2 !-translate-x-1/2 !-translate-y-1/2 uk-transition-fade">
+                            
+                            <div class="w-full bottom-0 absolute left-0 bg-gradient-to-t from-black/60 pt-8 p-3 flex justify-between text-white uk-transition-slide-bottom">
+                                <div class="flex items-center gap-2">
+                                    <!-- Reel user profile image -->
+                                    <img src="{{ reel.user.profile.image.url }}" alt="{{ reel.user.username }}" class="w-5 rounded-full">
+                                    <div class="text-sm">{{ reel.user.username }}</div>
+                                </div>
+                                <div class="flex items-center gap-2 text-xs">
+                                    <ion-icon class="text-lg md hydrated" name="heart-outline" role="img" aria-label="heart outline"></ion-icon>
+                                    {{ reel.likes }}  <!-- Show reel like count -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </a>
+                    {% empty %}
+                    <p>No reels to display.</p>
+                    {% endfor %}
+                    <div class="uk-scrollspy-inview " style="">
+                        <a href="#product_modal" class="group" uk-toggle="" aria-expanded="false">
+                            <div class="relative overflow-hidden rounded-lg">
+                                <div class="relative w-full md:h-60 h-56 transition-all group-hover:scale-110 duration-300">
+                                    <img src="assets/images/product/product-1.jpg" alt="" class="object-cover w-full h-full inset-0">
+                                </div> 
+                                <div class="absolute right-0 top-0 m-2 bg-slate-100 rounded-full py-0.5 px-2 text-sm font-bold dark:bg-slate-800/60"> $12 </div>
+                            </div> 
+                        </a>
+                        <div class="py-2">
+                            <h4 class="text-black lg:font-medium mb-0.5 dark:text-white"> The Deep Cleanse </h4>
+                            <p class="md:text-sm text-xs lg:font-medium text-gray-500 dark:text-white"> by <a href="profile.html"> Jesse Steeve </a> </p>
+                        </div> 
+                    </div>
+                
+                <!-- placeholders -->
+                
+            </div>
+
+            <!-- load more -->
+            <div class="flex justify-center my-6">
+                <button type="button" class="bg-white py-2 px-5 rounded-full shadow-md font-semibold text-sm dark:bg-dark2">Load more...</button>
+            </div>
+             
+        </div>
+
+
+    </div> 
+    
+
+</main>
+{% endblock %}

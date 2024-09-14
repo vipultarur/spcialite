@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load static %}
+    
+{% block main %}
+<main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-2.5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
+
+    <div class="relative overflow-hidden border -m-2.5 dark:border-slate-700">
+
+        <div class="flex bg-white dark:bg-dark2">
+
+            <!-- sidebar -->
+            <div class=" relative border-r dark:border-slate-700 w-full" >
+
+                <div id="side-chat" class="top-0 left-0 max-md:fixed max-md:w-5/6 max-md:h-screen bg-white z-50 max-md:shadow max-md:-translate-x-full dark:bg-dark2">
+
+                    <!-- heading title -->
+                    <div class="p-4 border-b dark:border-slate-700">
+                        
+                        <div class="flex mt-2 items-center justify-between">
+
+                            <h2 class="text-2xl font-bold text-black ml-1 dark:text-white"> Notifications </h2>
+                                  
+                            <!-- right action buttons -->
+                            <div class="flex items-center gap-2.5">
+
+                                
+                                <button class="group" aria-haspopup="true" aria-expanded="false">
+                                    <ion-icon name="settings-outline" class="text-2xl flex group-aria-expanded:rotate-180 md hydrated" role="img" aria-label="settings outline"></ion-icon>
+                                </button>
+                                <div class="md:w-[270px] w-full uk-dropdown" uk-dropdown="pos: bottom-left; offset:10; animation: uk-animation-slide-bottom-small"> 
+                                    <nav>
+                                        <a href="#"> <ion-icon class="text-2xl shrink-0 -ml-1 md hydrated" name="checkmark-outline" role="img" aria-label="checkmark outline"></ion-icon> Mark all as read </a>  
+                                        <a href="#"> <ion-icon class="text-2xl shrink-0 -ml-1 md hydrated" name="notifications-outline" role="img" aria-label="notifications outline"></ion-icon> notifications setting </a>  
+                                        <a href="#"> <ion-icon class="text-xl shrink-0 -ml-1 md hydrated" name="volume-mute-outline" role="img" aria-label="volume mute outline"></ion-icon> Mute notifications </a>     
+                                    </nav>
+                                </div>
+                                
+                                <button class="">
+                                    <ion-icon name="checkmark-circle-outline" class="text-2xl flex md hydrated" role="img" aria-label="checkmark circle outline"></ion-icon>
+                                </button>
+
+                                <!-- mobile toggle menu -->
+                                <button type="button" class="md:hidden" uk-toggle="target: #side-chat ; cls: max-md:-translate-x-full" aria-expanded="true">
+                                    <ion-icon name="chevron-down-outline" role="img" class="md hydrated" aria-label="chevron down outline"></ion-icon>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                       
+
+                    </div> 
+
+
+                    <!-- users list -->
+                    <div class="space-y-2 p-2 overflow-y-auto md:h-[calc(100vh-204px)] h-[calc(100vh-130px)]">
+                        {% for notification in notifications %}
+                            <a href="{% url 'mark_notification_as_seen' notification.id %}" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondary dark:hover:bg-white/10 {% if not notification.is_seen %}bg-teal-500/5{% endif %}">
+                                <div class="relative w-12 h-12 shrink-0">
+                                    <img src="{% if notification.sender.profile.image %}{{ notification.sender.profile.image.url }}{% else %}{% static 'assets/profile.png' %}{% endif %}" alt="" class="object-cover w-full h-full rounded-full">
+                                </div>
+                                <div class="flex-1">
+                                    <p>
+                                        {% if notification.notification_types == 1 %}
+                                            <b class="font-bold mr-1">{{ notification.sender.username }}</b> liked your post.
+                                        {% elif notification.notification_types == 2 %}
+                                            <b class="font-bold mr-1">{{ notification.sender.username }}</b> commented: "{{ notification.text_preview }}".
+                                        {% elif notification.notification_types == 3 %}
+                                            <b class="font-bold mr-1">{{ notification.sender.username }}</b> started following you.
+                                        {% endif %}
+                                    </p>
+                                    <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80">{{ notification.date|timesince }} ago</div>
+                                    {% if not notification.is_seen %}
+                                        <div class="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5"></div>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        {% empty %}
+                            <p class="p-2 text-center">No notifications available.</p>
+                        {% endfor %}
+
+                        <!-- Add audio element for notification sound -->
+                        <audio id="notificationSound" src="{% static 'assets/sound/notification.mp3' %}" preload="auto"></audio>
+
+                        <!-- JavaScript to play sound for unseen notifications -->
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                let unseenNotifications = {{ unseen_count }};
+                                console.log("Unseen notifications count:", unseenNotifications);
+                                if (unseenNotifications > 0) {
+                                    let audio = document.getElementById("notificationSound");
+                                    console.log("Audio element:", audio);
+                                    audio.play().catch(error => {
+                                        console.error("Error playing sound:", error);
+                                    });
+                                }
+                            });
+                        </script>
+
+                       
+
+                    </div>
+
+                </div>
+                
+                <!-- overly -->
+                <div id="side-chat" class="bg-slate-100/40 backdrop-blur w-full h-full dark:bg-slate-800/40 z-40 fixed inset-0 max-md:-translate-x-full md:hidden" uk-toggle="target: #side-chat ; cls: max-md:-translate-x-full" tabindex="0" aria-expanded="true"></div>
+                
+            </div> 
+
+            
+        </div>
+
+    </div> 
+    
+</main>
+
+{% endblock %}

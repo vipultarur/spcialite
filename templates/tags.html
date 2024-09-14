@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-2.5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
+
+    <div class="box relative rounded-lg shadow-md">
+
+        <div class="flex md:gap-4 gap-4 items-center md:p-8 p-6 md:pb-2" >
+        <div class="flex  items-center md:gap-8 " >
+
+            <div>
+                <div class="relative md:w-20 md:h-20 w-12 h-12 shrink-0"> 
+
+                    <label for="file" class="cursor-pointer">
+                        <img id="img" src="{% static 'assets/image.png' %}" class="object-cover w-full h-full rounded-full" alt="">
+                        <input type="file" id="file" class="hidden">
+                    </label>
+
+                   
+                    
+                </div>
+            </div>
+
+            
+        </div>
+            <div class=" items-center md:gap-8 md:p-4" >
+                <button class="inline-flex items-center gap-1 py-1 pl-2.5 pr-3 rounded-full bg-slate-50 border-2 border-slate-100 dark:text-white dark:bg-slate-700" type="button" aria-haspopup="true" aria-expanded="false"> 
+                    <span class="font-medium text-sm"> #{{tag.title}} </span> 
+                </button>
+                <button class="inline-flex items-center gap-1 py-1 pl-2.5 pr-3 rounded-full bg-slate-50 border-2 border-slate-100 dark:text-white dark:bg-slate-700" type="button" aria-haspopup="true" aria-expanded="false"> 
+                    <span class="font-medium text-sm"> <b>{{posts_count}} </b></span> 
+                    <span class="font-medium text-sm"> Post </span> 
+                </button>
+                
+            </div>
+        </div>
+
+        <!-- nav tabs -->
+        
+
+
+        <div id="setting_tab" class="uk-switcher md:py-12 md:px-16 p-6 overflow-hidden text-black text-sm" style="touch-action: pan-y pinch-zoom;"> 
+            
+
+            <!-- tab user basic info -->
+            <div class="uk-active" style="">
+                
+                <div class="masonry">
+                    {% for post in posts %}
+                    <!-- Each image is inside a div with the 'masonry-item' class -->
+                     
+                    <div class="masonry-item ">
+                       <a href="{{post.get_absolute_url}}"> <img src="{{post.picture.url}}" alt="{post.name}" class="rounded-lg w-full h-auto object-cover"></a>
+                    </div>
+                    {% endfor %}
+                    
+                </div>
+
+
+            </div>
+
+            <!-- tab socialinks -->   
+            
+
+            </div> 
+
+
+           
+
+        </div>
+        
+    
+    </div>
+    
+</main>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+    
+
+
+{% block content %}
+<main class="2xl:ml-[--w-side] xl:ml-[--w-side-md] md:ml-[--w-side-small]">
+
+    <div class="flex justify-center items-center w-full min-h-screen relative">
+
+        <div class="lg:rounded-xl shadow-xl bg-white relative lg:h-[calc(100vh-60px)] h-[calc(100vh-120px)]">
+
+            <video class="rounded-xl aspect-[9/16] h-full" controls autoplay>
+                <source src="{{ reel.video.url }}" type="video/mp4">  <!-- Replace with your reel video URL -->
+                Your browser does not support the video tag.
+            </video>         
+
+            <!-- action buttons -->
+            <div class="absolute bottom-0 md:-right-14 right-0 max-md:m-3 z-10">
+                <div class="flex flex-col gap-4 text-sm dark:text-white">
+
+                    <div>
+                        <a href="{% url 'reellike' reel.id%}">
+                        <div href="{% url 'reellike' reel.id%}"  class="bg-slate-200/80 p-2 rounded-full hover:scale-110 duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
+                                <path d="M1 8.25a1.25 1.25 0 112.5 0v7.5a1.25 1.25 0 11-2.5 0v-7.5zM11 3V1.7c0-.268.14-.526.395-.607A2 2 0 0114 3c0 .995-.182 1.948-.514 2.826-.204.54.166 1.174.744 1.174h2.52c1.243 0 2.261 1.01 2.146 2.247a23.864 23.864 0 01-1.341 5.974C17.153 16.323 16.072 17 14.9 17h-3.192a3 3 0 01-1.341-.317l-2.734-1.366A3 3 0 006.292 15H5V8h.963c.685 0 1.258-.483 1.612-1.068a4.011 4.011 0 012.166-1.73c.432-.143.853-.386 1.011-.814.16-.432.248-.9.248-1.388z"></path>
+                            </svg>
+                        </div>
+                        </a>  
+                        <div class="mt-1 text-center">{{ reel.likes }}</div>
+                    </div>
+                    
+                   
+                    
+                    <div>
+                        <button type="button" class="bg-slate-200/80 p-2 rounded-full hover:scale-110 duration-200" aria-haspopup="true" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
+                                <path fill-rule="evenodd" d="M10 2c-2.236 0-4.43.18-6.57.524C1.993 2.755 1 4.014 1 5.426v5.148c0 1.413.993 2.67 2.43 2.902 1.168.188 2.352.327 3.55.414.28.02.521.18.642.413l1.713 3.293a.75.75 0 001.33 0l1.713-3.293a.783.783 0 01.642-.413 41.102 41.102 0 003.55-.414c1.437-.231 2.43-1.49 2.43-2.902V5.426c0-1.413-.993-2.67-2.43-2.902A41.289 41.289 0 0010 2zM6.75 6a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 2.5a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z" clip-rule="evenodd"></path>
+                            </svg> 
+                        </button>
+                        <div class="mt-1 text-center">{{ comments_count}}</div>
+
+                        <div class="uk-dropdown" uk-dropdown="pos: bottom-right; offset: 10;" style="width:400px;"> 
+                            <div class="p-2 w-full flex-1" >
+
+                                <div class="divide-y divide-dashed w-full"  >
+                                    <div>
+                                        <center><h4><b>Comments</b></h4></center>
+                                    </div>
+                                    <div>
+                                        <div class="relative text-sm font-medium space-y-5 overflow-auto h-40 p-2"> 
+                                            {% if comments %}
+                                                {% for comment in comments %}
+                                                <div class="flex items-start gap-3 relative">
+                                                    <img src="{% if comment.user.profile.image %}{{comment.user.profile.image.url}}{% else %}{% static 'assets/profile.png' %} {% endif %}" alt="" class="w-6 h-6 mt-1 rounded-full">
+                                                    <div class="flex-1">
+                                                        <a href="#" class="text-black font-medium inline-block dark:text-white">{{ comment.user.username }}</a>
+                                                        <p class="mt-0.5">{{ comment.body }}</p>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+                                            {% else %}
+                                                <p class="text-gray-600 mt-4">No comments yet. Be the first to comment!</p>
+                                            {% endif %}
+                                            
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <form method="POST" class="sm:px-4 sm:py-3 p-2 border-t border-gray-100 flex items-center gap-1 dark:border-slate-700/40 ">
+                                            {% csrf_token %}
+                                            <img src="{% if reel.user.profile.image %}{{reel.user.profile.image.url}}{% else %}{% static 'assets/profile.png' %}{% endif %}" alt="" class="w-6 h-6 rounded-full ">
+                                            
+                                            <div class="flex-1 relative overflow-hidden h-10 ">
+                                                {{form.body}}  
+                                                <input type="hidden" name="post_id" value="{{ post.id }}">         
+                                                <div class="!top-2 pr-2 uk-drop" uk-drop="pos: bottom-right; mode: click">
+                                                    <div class="flex items-center gap-2" uk-scrollspy="target: > svg; cls: uk-animation-slide-right-small; delay: 100 ;repeat: true">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 fill-sky-600" style="opacity: 0;">
+                                                            <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 fill-pink-600" style="opacity: 0;">
+                                                            <path d="M3.25 4A2.25 2.25 0 001 6.25v7.5A2.25 2.25 0 003.25 16h7.5A2.25 2.25 0 0013 13.75v-7.5A2.25 2.25 0 0010.75 4h-7.5zM19 4.75a.75.75 0 00-1.28-.53l-3 3a.75.75 0 00-.22.53v4.5c0 .199.079.39.22.53l3 3a.75.75 0 001.28-.53V4.75z"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div> 
+                                                
+                                            </div>
+                                            
+                        
+                                            <button type="submit" class="text-sm rounded-full py-1.5 px-3.5 bg-secondery"> Replay</button>
+                                        </form> 
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <button type="button" class="bg-slate-200/80 p-2 rounded-full hover:scale-110 duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6">
+                                <path d="M3.105 2.289a.75.75 0 00-.826.95l1.414 4.925A1.5 1.5 0 005.135 9.25h6.115a.75.75 0 010 1.5H5.135a1.5 1.5 0 00-1.442 1.086l-1.414 4.926a.75.75 0 00.826.95 28.896 28.896 0 0015.293-7.154.75.75 0 000-1.115A28.897 28.897 0 003.105 2.289z"></path>
+                            </svg>
+                        </button> 
+                        <div class="mt-1 text-center">Share</div>
+                    </div>
+
+                    <div>
+                        <button type="button" class="bg-slate-200/80 p-2 rounded-full hover:scale-110 duration-200" aria-haspopup="true" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-7 h-7">
+                                <path fill-rule="evenodd" d="M4.5 12a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                        <div class="w-[253px] uk-dropdown" uk-dropdown="pos: bottom-right; offset: 10; animation: uk-animation-slide-bottom-small"> 
+                            <nav>
+                                <a href="#"> <ion-icon class="text-xl md hydrated" name="pricetags-outline" role="img" aria-label="pricetags outline"></ion-icon>    Add to Timeline </a>  
+                                <a href="#"> <ion-icon class="text-xl md hydrated" name="time-outline" role="img" aria-label="time outline"></ion-icon>      Save to Watch later </a>  
+                                <a href="#"> <ion-icon class="text-xl md hydrated" name="bookmark-outline" role="img" aria-label="bookmark outline"></ion-icon>  Save to playlist </a>  
+                                <a href="#"> <ion-icon class="text-xl md hydrated" name="share-outline" role="img" aria-label="share outline"></ion-icon>  Share </a>  
+                                <hr>
+                                <a href="#"> <ion-icon class="text-xl md hydrated" name="heart-dislike-outline" role="img" aria-label="heart dislike outline"></ion-icon>    Not interested </a>  
+                                <a href="#"> <ion-icon class="text-xl md hydrated" name="power-outline" role="img" aria-label="power outline"></ion-icon>    Don't recommend user </a>  
+                                <a href="#" class="text-red-400 hover:!bg-red-50 dark:hover:!bg-red-500/50"> <ion-icon class="text-xl md hydrated" name="flag-outline" role="img" aria-label="flag outline"></ion-icon>  Report </a>  
+                            </nav>
+                        </div>
+                    </div>
+
+                    <a href="{% url 'profile' reel.user.username %}" class="hover:scale-110 duration-200">
+                        <img src="{{reel.user.profile.image.url}}" alt="" class="w-9 h-9 shadow object-cover rounded-full">
+                    </a>
+
+                </div>
+            </div>
+
+        </div> 
+       
+    </div>
+    
+
+</main>
+{% endblock %}

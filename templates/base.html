@@ -1,0 +1,389 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
+    <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
+
+    <!-- title and description-->
+    <title>Instello</title>
+    <meta name="description" content="Instello - Sharing Photos platform HTML Template">
+   
+    <!-- css files -->
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">  
+    
+    <!-- google font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .white-grad {
+            background: 
+              linear-gradient(#ccc 0 0) padding-box, /*this is your grey background*/
+              linear-gradient(to right, #9c20aa, #fb3570) border-box;
+            color: #313149;
+            border: 3px solid transparent;
+          }
+    </style>
+</head>
+<body>
+
+
+    <div id="wrapper">
+
+        <!-- sidebar -->
+        <div id="sidebar" class="fixed top-0 left-0 z-40 max-md:top-auto max-md:bottom-0">
+
+            <div id="sidebar__inner" class="flex sside md:flex-col justify-between md:h-screen md:p-2 p-1 transition-all duration-500 bg-white shadow dark:bg-dark2 2xl:w-72 xl:w-60 max-xl:w-[73px] max-md:w-screen max-md:border-t max-md:dark:border-slate-700">
+
+                <!-- logo -->
+                <div class="flex h-20 px-2 max-md:fixed max-md:top-0 max-md:w-full max-md:bg-white/80 max-md:left-0 max-md:px-4 max-md:h-14 max-md:shadow-sm max-md:dark:bg-slate-900/80 backdrop-blur-xl">
+                    <a href="{% url 'index' %}" id="logo" class="flex items-center gap-3">
+
+                        <!-- logo icon -->
+                        <img id="logo__icon" src="{% static 'assets/images/favicon.png' %}" alt="" class="md:w-8 hidden text-2xl max-xl:!block max-md:!hidden shrink-0 uk-animation-scale-up"> 
+
+                        <!-- text logo -->
+                        <img id="logo__text" src="{% static 'assets/images/logo.png' %}" alt="" class="w-full h-6 ml-1 max-xl:hidden max-md:block dark:!hidden">
+                        <img id="logo__text" src="assets/images/logo-dark.svg" alt="" class="w-full h-6 ml-1 !hidden max-xl:!hidden max-md:block dark:max-md:!block dark:!block">
+                      
+                    </a>
+                </div>
+
+                <!-- nav -->
+                <nav class="flex-1 max-md:flex max-md:justify-around md:space-y-2">
+
+                    <!-- Home -->
+                    <a href="{% url 'index' %}" class="{% if request.path == '/' %}active{% endif %}">
+                        <svg id="icon__outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                        </svg>
+                        <svg id="icon__solid" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="hidden">
+                            <path fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="max-xl:hidden"> Home </span>
+                    </a>
+                
+                    <!-- Search -->
+                    <a href="#!" class="{% if request.path == '/search/' %}active{% endif %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                        <span class="max-xl:hidden"> Search </span>
+                    </a>  
+                    <div class="sm:w-[397px] w-full bg-white shadow-lg md:!left-[73px] hidden !left-0 dark:bg-dark2 dark:border1 max-md:bottom-[57px]" uk-drop="animation: uk-animation-slide-left-small , uk-transform-origin-center-left ;animate-out: true; pos: left ; mode:click; offset: 9"> 
+                        <div class="md:h-screen overflow-y-auto h-[calc(100vh-120px)]">
+
+                            <!-- header -->
+                            <div class="px-5 py-4 space-y-5 border-b border-gray-100 dark:border-slate-700">
+                                <h3 class="md:text-xl text-lg font-medium mt-3 text-black dark:text-white">Search</h3>
+
+                                <form action="{% url 'searchusers' %}" method="GET" class="relative mt-4">
+                                    <div class="absolute left-3 bottom-1/2 translate-y-1/2 flex"><ion-icon name="search" class="text-xl md hydrated" role="img" aria-label="search"></ion-icon></div>
+                                    <input type="text" name="q" value="{{request.GET.q}}" placeholder="Search" class="w-full !pl-10 !py-2 !rounded-lg">
+                                </form> 
+
+                            </div>
+
+                            <!-- contents list -->
+                            <div class="p-2 space-y-2 dark:text-white">
+
+                                <div class="flex items-center justify-between py-2.5 px-3 font-semibold">
+                                    <h4>Recent</h4>
+                                    <button type="button" class="text-blue-500 text-sm">Clear all</button>
+                                </div>
+
+                                {% for user in users %}
+                                    <a href="{% url 'directs' user.username %}" class="relative flex items-center gap-4 p-2 duration-200 rounded-xl hover:bg-secondery">
+                                        <div class="relative w-14 h-14 shrink-0"> 
+                                            <img src="{% if user.profile.image %}{{user.profile.image.url}}{% else %}{% static 'assets/profile.png' %}{% endif %}" alt="" class="object-cover w-full h-full rounded-full">
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center gap-2 mb-1.5">
+                                                <div class="mr-auto text-sm text-black dark:text-white font-medium">{{user.username}}</div>
+                                                <div class="text-xs font-light text-gray-500 dark:text-white/70">09:40AM</div> 
+                                            </div>
+                                            <div class="font-medium overflow-hidden text-ellipsis text-sm whitespace-nowrap">@{{user.username}}</div>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+
+
+                            </div>
+
+                        </div>
+                    </div> 
+
+
+                    <a href="{% url 'inbox' %}"  class="max-md:!fixed max-md:top-2 max-md:right-2 {% if request.path == '/message/inbox/' %}active{% endif %}">
+                        <svg id="icon__outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                        </svg>
+                        <svg id="icon__solid" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="hidden">
+                            <path fill-rule="evenodd" d="M4.848 2.771A49.144 49.144 0 0112 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.024 3.348 3.97v6.02c0 1.946-1.37 3.678-3.348 3.97a48.901 48.901 0 01-3.476.383.39.39 0 00-.297.17l-2.755 4.133a.75.75 0 01-1.248 0l-2.755-4.133a.39.39 0 00-.297-.17 48.9 48.9 0 01-3.476-.384c-1.978-.29-3.348-2.024-3.348-3.97V6.741c0-1.946 1.37-3.68 3.348-3.97zM6.75 8.25a.75.75 0 01.75-.75h9a.75.75 0 010 1.5h-9a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5H12a.75.75 0 000-1.5H7.5z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span  class="max-xl:hidden"> Messages </span>
+                    </a>
+                    
+                    <!-- reels -->
+                    <a href="{% url 'reels' %}" class="{% if request.path == '/reels/' %}active{% endif %}">
+                        <svg id="icon__outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 7.5l16.5-4.125M12 6.75c-2.708 0-5.363.224-7.948.655C2.999 7.58 2.25 8.507 2.25 9.574v9.176A2.25 2.25 0 004.5 21h15a2.25 2.25 0 002.25-2.25V9.574c0-1.067-.75-1.994-1.802-2.169A48.329 48.329 0 0012 6.75zm-1.683 6.443l-.005.005-.006-.005.006-.005.005.005zm-.005 2.127l-.005-.006.005-.005.005.005-.005.005zm-2.116-.006l-.005.006-.006-.006.005-.005.006.005zm-.005-2.116l-.006-.005.006-.005.005.005-.005.005zM9.255 10.5v.008h-.008V10.5h.008zm3.249 1.88l-.007.004-.003-.007.006-.003.004.006zm-1.38 5.126l-.003-.006.006-.004.004.007-.006.003zm.007-6.501l-.003.006-.007-.003.004-.007.006.004zm1.37 5.129l-.007-.004.004-.006.006.003-.004.007zm.504-1.877h-.008v-.007h.008v.007zM9.255 18v.008h-.008V18h.008zm-3.246-1.87l-.007.004L6 16.127l.006-.003.004.006zm1.366-5.119l-.004-.006.006-.004.004.007-.006.003zM7.38 17.5l-.003.006-.007-.003.004-.007.006.004zm-1.376-5.116L6 12.38l.003-.007.007.004-.004.007zm-.5 1.873h-.008v-.007h.008v.007zM17.25 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zm0 4.5a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                        </svg>
+                        <svg id="icon__solid" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="hidden">
+                            <path fill-rule="evenodd" d="M20.432 4.103a.75.75 0 00-.364-1.455L4.128 6.632l-.2.033C2.498 6.904 1.5 8.158 1.5 9.575v9.175a3 3 0 003 3h15a3 3 0 003-3V9.574c0-1.416-.997-2.67-2.429-2.909a49.016 49.016 0 00-7.255-.658l7.616-1.904zm-9.585 8.56a.75.75 0 010 1.06l-.005.006a.75.75 0 01-1.06 0l-.006-.005a.75.75 0 010-1.061l.005-.005a.75.75 0 011.06 0l.006.005zM9.781 15.85a.75.75 0 001.061 0l.005-.005a.75.75 0 000-1.061l-.005-.005a.75.75 0 00-1.06 0l-.006.005a.75.75 0 000 1.06l.005.006zm-1.055-1.066a.75.75 0 010 1.06l-.005.006a.75.75 0 01-1.061 0l-.005-.005a.75.75 0 010-1.06l.005-.006a.75.75 0 011.06 0l.006.005zM7.66 13.73a.75.75 0 001.061 0l.005-.006a.75.75 0 000-1.06l-.005-.005a.75.75 0 00-1.06 0l-.006.005a.75.75 0 000 1.06l.005.006zM9.255 9.75a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75V10.5a.75.75 0 01.75-.75h.008zm3.624 3.28a.75.75 0 00.275-1.025L13.15 12a.75.75 0 00-1.025-.275l-.006.004a.75.75 0 00-.275 1.024l.004.007a.75.75 0 001.024.274l.007-.003zm-1.38 5.126a.75.75 0 01-1.024-.274l-.004-.007a.75.75 0 01.275-1.024l.006-.004a.75.75 0 011.025.274l.004.007a.75.75 0 01-.275 1.024l-.006.004zm.282-6.776a.75.75 0 00-.274-1.025l-.007-.003a.75.75 0 00-1.024.274l-.004.007a.75.75 0 00.274 1.024l.007.004a.75.75 0 001.024-.274l.004-.007zm1.369 5.129a.75.75 0 01-1.025.274l-.006-.003a.75.75 0 01-.275-1.025l.004-.006a.75.75 0 011.025-.275l.006.004a.75.75 0 01.275 1.024l-.004.007zm-.145-1.502a.75.75 0 00.75-.75v-.007a.75.75 0 00-.75-.75h-.008a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008zm-3.75 2.243a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75V18a.75.75 0 01.75-.75h.008zm-2.871-.47a.75.75 0 00.274-1.025l-.003-.006a.75.75 0 00-1.025-.275l-.006.004a.75.75 0 00-.275 1.025l.004.006a.75.75 0 001.024.274l.007-.003zm1.366-5.12a.75.75 0 01-1.025-.274l-.004-.006a.75.75 0 01.275-1.025l.006-.003a.75.75 0 011.025.274l.004.007a.75.75 0 01-.275 1.024l-.006.004zm.281 6.215a.75.75 0 00-.275-1.024l-.006-.004a.75.75 0 00-1.025.274l-.003.007a.75.75 0 00.274 1.024l.007.004a.75.75 0 001.024-.274l.004-.007zM6.655 12.76a.75.75 0 01-1.025.274l-.006-.003a.75.75 0 01-.275-1.025L5.353 12a.75.75 0 011.025-.275l.006.004a.75.75 0 01.275 1.024l-.004.007zm-1.15 2.248a.75.75 0 00.75-.75v-.007a.75.75 0 00-.75-.75h-.008a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008zM17.25 10.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm1.5 6a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" clip-rule="evenodd" />
+                        </svg>  
+                        <span  class="max-xl:hidden"> reels </span>
+                    </a>
+
+                    <!-- Notification --> 
+                    <a href="#!" class="max-md:!fixed max-md:top-2 max-md:right-14 relative"> 
+                        <svg id="icon__outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                        </svg>
+                        <svg id="icon__solid" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="hidden">
+                            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                        </svg>
+                        <span  class="max-xl:hidden"> Notifications </span>
+                        {% if unseen_count %}
+                        <div class="w-2 h-2 bg-red-600 rounded-full absolute left-7 top-2.5"></div>
+                        {% endif %}
+                    </a>
+                    <div class="sm:w-[397px] w-full bg-white shadow-lg md:!left-[73px] hidden !left-0 dark:bg-dark2 dark:border1 max-md:bottom-[57px]" uk-drop="pos: left-center;animate-out: true; animation: uk-animation-slide-left-medium ; mode:click"> 
+                        <div class="md:h-screen overflow-y-auto h-[calc(100vh-120px)]">
+
+                            <!-- header -->
+                            <div class="flex items-center justify-between px-5 py-4 mt-3">
+                                <h3 class="md:text-xl text-lg font-medium mt-3 text-black dark:text-white">Notification</h3>
+
+                                <div class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- contents list -->
+                            <div class="px-2 -mt-2 text-sm font-normal">
+ 
+                                <div class="px-5 py-3 -mx-2">
+                                    <h4 class="font-semibold">New</h4>
+                                </div>
+                                {% for notification in notifications %}
+                                    <a href="{% url 'mark_notification_as_seen' notification.id %}" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondary dark:hover:bg-white/10 {% if not notification.is_seen %}bg-teal-500/5{% endif %}">
+                                        <div class="relative w-12 h-12 shrink-0">
+                                            <img src="{% if notification.sender.profile.image %}{{ notification.sender.profile.image.url }}{% else %}{% static 'assets/profile.png' %}{% endif %}" alt="" class="object-cover w-full h-full rounded-full">
+                                        </div>
+                                        <div class="flex-1">
+                                            <p>
+                                                {% if notification.notification_types == 1 %}
+                                                    <b class="font-bold mr-1">{{ notification.sender.username }}</b> liked your post.
+                                                {% elif notification.notification_types == 2 %}
+                                                    <b class="font-bold mr-1">{{ notification.sender.username }}</b> commented: "{{ notification.text_preview }}".
+                                                {% elif notification.notification_types == 3 %}
+                                                    <b class="font-bold mr-1">{{ notification.sender.username }}</b> started following you.
+                                                {% elif notification.notification_types == 4 %}
+                                                    <b class="font-bold mr-1">{{ notification.sender.username }}</b> liked your reel.
+                                                {% endif %}
+                                            </p>
+                                            <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80">{{ notification.date|timesince }} ago</div>
+                                            {% if not notification.is_seen %}
+                                                <div class="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5"></div>
+                                            {% endif %}
+                                        </div>
+                                    </a>
+                                {% empty %}
+                                    <p class="p-2 text-center">No notifications available.</p>
+                                {% endfor %}
+
+
+                      
+                        <!-- JavaScript to play sound for unseen notifications -->
+                        
+                                <div class="border-t px-5 py-3 -mx-2 mt-4 dark:border-slate-700/40">
+                                    <h4 class="font-semibold">This week</h4>
+                                </div>
+
+                               
+                                {% for notification in notificationslist %}
+                                    <a href="{% url 'mark_notification_as_seen' notification.id %}" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondary dark:hover:bg-white/10 {% if not notification.is_seen %}bg-teal-500/5{% endif %}">
+                                        <div class="relative w-12 h-12 shrink-0">
+                                            <img src="{% if notification.sender.profile.image %}{{ notification.sender.profile.image.url }}{% else %}{% static 'assets/profile.png' %}{% endif %}" alt="" class="object-cover w-full h-full rounded-full">
+                                        </div>
+                                        <div class="flex-1">
+                                            <p>
+                                                {% if notification.notification_types == 1 %}
+                                                    <b class="font-bold mr-1">{{ notification.sender.username }}</b> liked your post.
+                                                {% elif notification.notification_types == 2 %}
+                                                    <b class="font-bold mr-1">{{ notification.sender.username }}</b> commented: "{{ notification.text_preview }}".
+                                                {% elif notification.notification_types == 3 %}
+                                                    <b class="font-bold mr-1">{{ notification.sender.username }}</b> started following you.
+                                                {% elif notification.notification_types == 4 %}
+                                                    <b class="font-bold mr-1">{{ notification.sender.username }}</b> liked your reel.
+                                                {% endif %}
+                                            </p>
+                                            <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80">{{ notification.date|timesince }} ago</div>
+                                            {% if not notification.is_seen %}
+                                                <div class="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5"></div>
+                                            {% endif %}
+                                        </div>
+                                    </a>
+                                {% empty %}
+                                    <p class="p-2 text-center">No notifications available.</p>
+                                {% endfor %}
+                                
+                            </div>
+
+                        </div>
+                    </div> 
+
+                    <!-- create a post -->
+                    <a href="!#">
+                        <button uk-toggle="target: #create-post" uk-toggle="" class="flex items-center gap-3 w-full">
+                        <svg id="icon__outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <svg id="icon__solid" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="hidden">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clip-rule="evenodd" />
+                        </svg>
+                        <span  class="max-xl:hidden"> Create </span></button>
+                    </a>
+                    
+                    <a href="{% url 'profile' user.username %}" class="max-md:!hidden {% if request.path == '/{{user.username}}/' %}active{% endif %}">
+                        
+                        <svg id="icon__outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <svg id="icon__solid" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="hidden">
+                            <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span  class="max-xl:hidden"> Profile </span>
+                    </a>
+ 
+                </nav>
+
+                <!-- profile -->
+                <div >
+                    <a id="profile-link" class="flex items-center gap-3 p-3 group">
+                        <img src="{% if request.user.profile.image %}{{ request.user.profile.image.url }}{% else %}{% static 'assets/profile.png' %}{% endif %}" alt="" class="rounded-full md:w-7 md:h-7 w-5 h-5 shrink-0">
+                        <span class="font-semibold text-sm max-xl:hidden">{{user.first_name|title}} {{user.last_name|title}}  </span>
+                        <ion-icon name="chevron-forward-outline"  class="text-xl ml-auto duration-200 group-aria-expanded:-rotate-90 max-xl:hidden"></ion-icon>
+                    </a>
+                    <div class="bg-white sm:w-64 2xl:w-[calc(100%-16px)] w-full shadow-lg border rounded-xl overflow-hidden max-md:!top-auto max-md:bottom-16 border2 dark:bg-dark2 hidden" uk-drop="animation:uk-animation-slide-bottom-medium ;animate-out: true">
+
+                        <div class="w-full h-1.5 bg-gradient-to-r to-purple-500 via-red-500 from-pink-500"></div>
+ 
+                        <div class="p-4 text-xs font-medium">
+                            <a href="{% url 'profile' user.username %}">
+                                <img src="{% if request.user.profile.image %}{{ request.user.profile.image.url }}{% else %}{% static 'assets/profile.png' %}{% endif %}" class="w-8 h-8 rounded-full" alt="">
+                                <div class="mt-2 space-y-0.5">
+                                    <div class="text-base font-semibold"> {{user.first_name|title}} {{user.last_name|title}} </div>
+                                    <div class="text-gray-400 dark:text-white/80"> @{{user.username}}  </div>
+                                </div>
+                            </a>
+                            <div class="mt-3 flex gap-3.5">
+                                <div> <a href="profile.html"> <strong> 620K </strong> <span class="text-gray-400 dark:text-white/80 ml-1">Following </span> </a> </div>
+                                <div> <a href="profile.html"> <strong> 38k </strong> <span class="text-gray-400 dark:text-white/80 ml-1">Followers </span> </a>  </div>
+                            </div>
+                                
+                        </div>
+                        <hr class="opacity-60">
+                        <ul class="text-sm font-semibold p-2">
+                            <li> <a href="setting.html" class="flex gap-3 rounded-md p-2 hover:bg-secondery"> <ion-icon name="person-outline" class="text-lg"></ion-icon> Profile     </a></li>
+                            <li> <a href="upgrade.html" class="flex gap-3 rounded-md p-2 hover:bg-secondery"> <ion-icon name="bookmark-outline" class="text-lg"></ion-icon> Upgrade </a></li> 
+                            <li> <a href="setting.html" class="flex gap-3 rounded-md p-2 hover:bg-secondery"> <ion-icon name="settings-outline" class="text-lg"></ion-icon> Acount Setting  </a></li>
+                            <li> <a href="form-login.html" class="flex gap-3 rounded-md p-2 hover:bg-secondery"> <ion-icon name="log-out-outline" class="text-lg"></ion-icon> Log Out</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        {% block content %}{% endblock  %}
+
+    </div>
+
+    <!-- create status -->
+    <div class="hidden lg:p-20" id="create-status" uk-modal="">
+   
+        <div class="uk-modal-dialog tt relative overflow-hidden mx-auto bg-white p-7 shadow-xl rounded-lg md:w-[520px] w-full dark:bg-dark2">
+
+            <div class="text-center py-3 border-b -m-7 mb-0 dark:border-slate-700">
+                <h2 class="text-sm font-medium"> Create Status </h2>
+
+                <!-- close button -->
+                <button type="button" class="button__ico absolute top-0 right-0 m-2.5 uk-modal-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+     
+            </div>
+                    
+            <div class="space-y-5 mt-7">
+
+                <div> 
+                    <label for="" class="text-base">What do you have in mind? </label>
+                    <input type="text"  class="w-full mt-3">
+                </div>
+
+                <div>  
+                    <div class="w-full h-72 relative border1 rounded-lg overflow-hidden bg-[url('../images/ad_pattern.png')] bg-repeat">
+                    
+                        <label for="createStatusUrl" class="flex flex-col justify-center items-center absolute -translate-x-1/2 left-1/2 bottom-0 z-10 w-full pb-6 pt-10 cursor-pointer bg-gradient-to-t from-gray-700/60">
+                            <input id="createStatusUrl" type="file" class="hidden" />
+                            <ion-icon name="image" class="text-3xl text-teal-600"></ion-icon>
+                            <span class="text-white mt-2">Browse to Upload image </span>
+                        </label>
+
+                        <img id="createStatusImage" src="#" alt="Uploaded Image" accept="image/png, image/jpeg" style="display:none;" class="w-full h-full absolute object-cover">
+
+                    </div>
+
+                </div>
+
+                <div class="flex justify-between items-center">
+
+                    <div class="flex items-start gap-2">
+                        <ion-icon name="time-outline" class="text-3xl text-sky-600  rounded-full bg-blue-50 dark:bg-transparent"></ion-icon>
+                        <p class="text-sm text-gray-500 font-medium"> Your Status will be available <br> for <span class="text-gray-800"> 24 Hours</span> </p>
+                    </div>
+
+                    <button type="button" class="button bg-blue-500 text-white px-8"> Create</button>
+
+                </div>
+
+            </div>
+        
+        </div>
+
+    </div>
+
+    <!-- create post modal -->
+   
+ 
+    {% comment %} reel model {% endcomment %}
+   
+
+    <!-- Uikit js you can use cdn  https://getuikit.com/docs/installation  or fine the latest  https://getuikit.com/docs/installation -->
+    <script src="{% static 'assets/js/uikit.min.js' %}"></script>
+    <script src="{% static 'assets/js/script.js' %}"></script>
+
+    <!-- Ion icon -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+ 
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-2.5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
+
+    <div class="box relative rounded-lg shadow-md">
+
+        
+
+        <!-- nav tabs -->
+        <div class="relative border-b uk-slider" tabindex="-1" uk-slider="finite: true">
+
+            <nav class="uk-slider-container overflow-hidden nav__underline px-6 p-0 border-transparent -mb-px">
+
+                <ul class="uk-slider-items w-[calc(100%+10px)] !overflow-hidden" uk-switcher="connect: #setting_tab ; animation: uk-animation-slide-right-medium, uk-animation-slide-left-medium" style="transform: translate3d(0px, 0px, 0px);"> 
+                    
+                    <li class="w-auto pr-2.5 uk-active" tabindex="-1"> <a href="#" aria-expanded="true"><ion-icon name="copy-outline"></ion-icon> Post </a> </li>
+                    <li class="w-auto pr-2.5" tabindex="-1"> <a href="#" aria-expanded="false"> Friends</a> </li>
+                    
+                </ul>
+            
+            </nav>
+                    
+            <a class="absolute -translate-y-1/2 top-1/2 left-0 flex items-center w-20 h-full p-2 py-1 justify-start bg-gradient-to-r from-white via-white dark:from-slate-800 dark:via-slate-800 uk-invisible" href="#" uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-2xl ml-1 md hydrated" role="img" aria-label="chevron back"></ion-icon> </a>
+            <a class="absolute right-0 -translate-y-1/2 top-1/2 flex items-center w-20 h-full p-2 py-1 justify-end bg-gradient-to-l from-white via-white dark:from-slate-800 dark:via-slate-800" href="#" uk-slider-item="next">  <ion-icon name="chevron-forward" class="text-2xl mr-1 md hydrated" role="img" aria-label="chevron forward"></ion-icon> </a>
+    
+        </div> 
+
+
+        <div id="setting_tab" class="uk-switcher md:py-12 md:px-16 p-6 overflow-hidden text-black text-sm" style="touch-action: pan-y pinch-zoom;"> 
+            
+
+            <!-- tab user basic info -->
+            <div class="uk-active" style="">
+                
+                <div class="masonry">
+                    {% if post_results %}
+
+                        {% for post in post_results %}
+                        <!-- Each image is inside a div with the 'masonry-item' class -->
+                        
+                        <div class="masonry-item ">
+                        <a href="{{post.get_absolute_url}}"> <img src="{{post.picture.url}}" alt="{post.name}" class="rounded-lg w-full h-auto object-cover"></a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No posts found matching "{{ query }}".</p>
+                    {% endif %}
+                </div>
+
+
+            </div>
+
+            
+            <!-- tab checkbox -->
+            <div class="" style="">
+
+                <div>
+                    {% if user_results %}
+                    <div class="side-list ml-5 mr-5" >
+                        <div class="grid md:grid-cols-2 md:gap-2 gap-3">
+                        {% for user in user_results %}
+                            
+                            <div class="flex md:items-center space-x-4 p-4 rounded-md box">
+                                <a href="{% url 'profile' username=user.username %}" >
+                                <div class="sm:w-20 w-14 sm:h-20 h-14 flex-shrink-0 rounded-lg relative"> 
+                                    <img src="{% if user.profile.image %}{{ user.profile.image.url }}{% else %}{% static 'assets/profile.png' %}{% endif %}" class="absolute w-full h-full inset-0 rounded-md object-cover shadow-sm" alt="">
+                                </div> 
+                                <div class="flex-1">
+                                    <a href="timeline-group.html" class="md:text-lg text-base font-semibold capitalize text-black dark:text-white"> Delicious Foods   </a>
+                                    <div class="flex space-x-2 items-center text-sm font-normal">
+                                        <div> @{{ user.username }}</div>
+                                    </div>
+                                </div>
+                            </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% else %}
+                        <p>No users found matching "{{ query }}".</p>
+                    {% endif %}
+                    
+
+                </div>
+
+            </div> 
+
+
+           
+
+        </div>
+        
+    
+    </div>
+    
+</main>
+{% endblock %}

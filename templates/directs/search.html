@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<main id="site__main" class="2xl:ml-[--w-side] xl:ml-[--w-side-md] md:ml-[--w-side-small]">
+
+    <div class="relative overflow-hidden border -m-2.5 dark:border-slate-700">
+
+        <div class="flex bg-white dark:bg-dark2">
+
+            <!-- sidebar -->
+            <div class="relative border-r dark:border-slate-700 w-full">
+
+                <div id="side-chat" class="top-0 left-0 max-md:fixed max-md:w-5/6 max-md:h-screen bg-white z-50 max-md:shadow max-md:-translate-x-full dark:bg-dark2">
+
+                    <!-- heading title -->
+                    <div class="p-4 border-b dark:border-slate-700">
+                        
+                        <div class="flex mt-2 items-center justify-between">
+
+                            <a href="{% url 'searchusers' %}" class="text-2xl font-bold text-black ml-1 dark:text-white"> Users </a>
+                                  
+                            <!-- right action buttons -->
+                            <div class="flex items-center gap-2.5">
+
+                                
+                                <button class="group" aria-haspopup="true" aria-expanded="false">
+                                    <ion-icon name="settings-outline" class="text-2xl flex group-aria-expanded:rotate-180 md hydrated" role="img" aria-label="settings outline"></ion-icon>
+                                </button>
+                                <div class="md:w-[270px] w-full uk-dropdown" uk-dropdown="pos: bottom-left; offset:10; animation: uk-animation-slide-bottom-small" style="max-width: 1023px; top: 62.0003px; left: 285.333px;"> 
+                                    <nav>
+                                        <a href="#"> <ion-icon class="text-2xl shrink-0 -ml-1 md hydrated" name="checkmark-outline" role="img" aria-label="checkmark outline"></ion-icon> Mark all as read </a>  
+                                        <a href="#"> <ion-icon class="text-2xl shrink-0 -ml-1 md hydrated" name="notifications-outline" role="img" aria-label="notifications outline"></ion-icon> notifications setting </a>  
+                                        <a href="#"> <ion-icon class="text-xl shrink-0 -ml-1 md hydrated" name="volume-mute-outline" role="img" aria-label="volume mute outline"></ion-icon> Mute notifications </a>     
+                                    </nav>
+                                </div>
+                                
+                                <button class="">
+                                    <ion-icon name="checkmark-circle-outline" class="text-2xl flex md hydrated" role="img" aria-label="checkmark circle outline"></ion-icon>
+                                </button>
+
+                                <!-- mobile toggle menu -->
+                                <button type="button" class="md:hidden" uk-toggle="target: #side-chat ; cls: max-md:-translate-x-full" aria-expanded="true">
+                                    <ion-icon name="chevron-down-outline" role="img" class="md hydrated" aria-label="chevron down outline"></ion-icon>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <!-- search -->
+                        <form action="" method="GET" class="relative mt-4">
+                            <div class="absolute left-3 bottom-1/2 translate-y-1/2 flex"><ion-icon name="search" class="text-xl md hydrated" role="img" aria-label="search"></ion-icon></div>
+                            <input type="text" name="q" value="{{request.GET.q}}" placeholder="Search" class="w-full !pl-10 !py-2 !rounded-lg">
+                        </form> 
+
+                    </div> 
+
+
+                    <!-- users list -->
+                    <div class="space-y-2 p-2 overflow-y-auto md:h-[calc(100vh-204px)] h-[calc(100vh-130px)]">
+                        {% for user in users %}
+                            <a href="{% url 'directs' user.username %}" class="relative flex items-center gap-4 p-2 duration-200 rounded-xl hover:bg-secondery">
+                                <div class="relative w-14 h-14 shrink-0"> 
+                                    <img src="{% if user.profile.image %}{{user.profile.image.url}}{% else %}{% static 'assets/profile.png' %}{% endif %}" alt="" class="object-cover w-full h-full rounded-full">
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2 mb-1.5">
+                                        <div class="mr-auto text-sm text-black dark:text-white font-medium">{{user.username}}</div>
+                                        <div class="text-xs font-light text-gray-500 dark:text-white/70">09:40AM</div> 
+                                    </div>
+                                    <div class="font-medium overflow-hidden text-ellipsis text-sm whitespace-nowrap">@{{user.username}}</div>
+                                </div>
+                                {% if user.user != request.user %}
+                                    {% if follow_status %}
+                                        <a href="{% url 'follow' user.user 0 %}" class="button bg-pink-100 text-pink-600 border border-pink-200" > 
+                                            <span class="font-medium text-sm"> Unfollow </span> 
+                                        </a>   
+                                    {% else %}
+                                        <a href="{% url 'follow' user.user 1 %}" class="button text-gray-600 bg-slate-200" > 
+                                            <span class="font-medium text-sm"> Follow </span> 
+                                        </a>
+                                    {% endif %}
+                                
+                                {% endif %}
+                            </a>
+                        {% endfor %}
+                       
+
+                    </div>
+
+                </div>
+                
+                <!-- overly -->
+                <div id="side-chat" class="bg-slate-100/40 backdrop-blur w-full h-full dark:bg-slate-800/40 z-40 fixed inset-0 max-md:-translate-x-full md:hidden" uk-toggle="target: #side-chat ; cls: max-md:-translate-x-full" tabindex="0" aria-expanded="true"></div>
+                
+            </div> 
+
+            
+        </div>
+
+    </div> 
+    
+</main>
+{% endblock content %}
