@@ -288,18 +288,14 @@
                                     <div class="text-gray-400 dark:text-white/80"> @{{user.username}}  </div>
                                 </div>
                             </a>
-                            <div class="mt-3 flex gap-3.5">
-                                <div> <a href="profile.html"> <strong> 620K </strong> <span class="text-gray-400 dark:text-white/80 ml-1">Following </span> </a> </div>
-                                <div> <a href="profile.html"> <strong> 38k </strong> <span class="text-gray-400 dark:text-white/80 ml-1">Followers </span> </a>  </div>
-                            </div>
+                            
                                 
                         </div>
                         <hr class="opacity-60">
                         <ul class="text-sm font-semibold p-2">
-                            <li> <a href="setting.html" class="flex gap-3 rounded-md p-2 hover:bg-secondery"> <ion-icon name="person-outline" class="text-lg"></ion-icon> Profile     </a></li>
-                            <li> <a href="upgrade.html" class="flex gap-3 rounded-md p-2 hover:bg-secondery"> <ion-icon name="bookmark-outline" class="text-lg"></ion-icon> Upgrade </a></li> 
-                            <li> <a href="setting.html" class="flex gap-3 rounded-md p-2 hover:bg-secondery"> <ion-icon name="settings-outline" class="text-lg"></ion-icon> Acount Setting  </a></li>
-                            <li> <a href="form-login.html" class="flex gap-3 rounded-md p-2 hover:bg-secondery"> <ion-icon name="log-out-outline" class="text-lg"></ion-icon> Log Out</a></li>
+                            <li> <a href="{% url 'profile' request.user %}" class="flex gap-3 rounded-md p-2 hover:bg-secondery"> <ion-icon name="person-outline" class="text-lg"></ion-icon> Profile     </a></li>
+                            {% comment %} <li> <a href="setting.html" class="flex gap-3 rounded-md p-2 hover:bg-secondery"> <ion-icon name="settings-outline" class="text-lg"></ion-icon> Acount Setting  </a></li> {% endcomment %}
+                            <li> <a href="{% url 'logout' %}" class="flex gap-3 rounded-md p-2 hover:bg-secondery"> <ion-icon name="log-out-outline" class="text-lg"></ion-icon> Log Out</a></li>
                         </ul>
 
                     </div>

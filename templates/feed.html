@@ -22,6 +22,7 @@
                                         <ion-icon name="camera" class="text-2xl"></ion-icon>
                                     </a>
                                 </li>
+                                {% if user_status_count != 0 %}
                                 <li class="md:pr-2.5 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
                                     <a href="{% url 'profile_status' user.id %}" class="status-avatar" data-user-id="{{ user.id }}">
                                         <div class="md:w-20 md:h-20 w-12 h-12  white-grad relative md:border-4  rounded-full overflow-hidden dark:border-slate-700" style=>
@@ -34,6 +35,8 @@
                                         <span class="text-xs mt-1 text-center block">Your Story</span>
                                     </a>
                                 </li>
+                                {% endif %}
+                                
                                 <!-- User status images -->
                                 {% for user, statuses in user_statuses.items %}
                                     <li class="md:pr-2.5 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">

@@ -19,7 +19,9 @@ from status.form import StatusForm
 from status.models import Status
 
 @login_required
-def index(request): 
+def index(request):
+    user = request.user
+    user_status_count = Status.objects.filter(user=user).count()
     user = request.user    
     posts = Stream.objects.filter(user=user)
     reelposts = ReelStream.objects.filter(user=user)
@@ -82,8 +84,8 @@ def index(request):
         'notifications': notifications,
         'unseen_count': unseen_count,
         'notificationslist': notificationslist,  
-        'statuses': statuses,
         'user_statuses': user_statuses,
+        'user_status_count':user_status_count,
     }
 
     return render(request, 'feed.html', context)
