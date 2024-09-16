@@ -15,8 +15,8 @@ from datetime import timedelta
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from status.form import StatusForm
-from status.models import Status
+from status.form import HighlightCreateForm, StatusForm
+from status.models import Highlight, Status
 
 @login_required
 def index(request):
@@ -429,3 +429,53 @@ def reel_like(request, id):
 
     return HttpResponseRedirect(reverse('reeldetail', args=[id]))
 
+def highlight_detail(request, highlight_id):
+    # Get the highlight by its ID
+    highlight = get_object_or_404(Highlight, id=highlight_id)
+
+    # Get the statuses associated with this highlight
+    statuses = highlight.statuses.all()
+
+    # Determine media type for each status (image or video)
+    for status in statuses:
+        if status.media.url.endswith(('.mp4', '.mov', '.avi', '.mkv')):
+            status.media_type = 'video'
+        else:
+            status.media_type = 'image'
+
+    context = {
+        'highlight': highlight,
+        'statuses': statuses,
+    }
+
+    return render(request, 'highlight_detail.html', context)
+
+def create_highlight(request):
+    # Get all the statuses (stories) of the current user
+    stories = Status.objects.filter(user=request.user)
+
+    # Add media type (image or video) to each story
+    for story in stories:
+        if story.media.url.endswith(('.mp4', '.mov', '.avi', '.mkv')):
+            story.media_type = 'video'
+        else:
+            story.media_type = 'image'
+
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        selected_stories = request.POST.getlist('selected_stories')
+        cover = request.FILES.get('cover')
+
+        if title and selected_stories:
+            # Create the highlight
+            highlight = Highlight.objects.create(
+                user=request.user,
+                title=title,
+                cover=cover
+            )
+            # Add the selected stories (statuses) to the highlight
+            highlight.statuses.add(*selected_stories)
+            highlight.save()
+            return redirect('profile', username=request.user.username)  # Redirect to profile after creation
+
+    return render(request, 'newhighlights.html', {'stories': stories})

@@ -50,7 +50,7 @@ class Post(models.Model):
         return reverse("postdetail", args=[str(self.id)])
 
     def __str__(self):
-        return str(self.caption)
+        return self.caption
 
 
 

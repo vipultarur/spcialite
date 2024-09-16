@@ -77,3 +77,8 @@ def profile_status(request, user_id):
         status.media_type = 'video' if status.media.url.endswith(('.mp4', '.mov')) else 'image'
     
     return render(request, 'profile_status.html', {'user': user, 'statuses': statuses})    
+
+
+
+
+

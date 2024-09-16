@@ -9,7 +9,7 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from status.models import Status  # Assuming you're using Django's built-in User model
+from status.models import Highlight, Status  # Assuming you're using Django's built-in User model
 from .forms import EditProfileForm, UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -59,11 +59,16 @@ def UserProfile(request, username):
         user_statuses[status.user].append(status)
 
     follow_status = Follow.objects.filter(following=user, follower=request.user).exists()    
+    
+    # Fetch user's highlights
+    highlights = Highlight.objects.filter(user=user)
+
     # Pagination
     paginator = Paginator(posts, 3)
     page_number = request.GET.get('page')
     posts_paginator = paginator.get_page(page_number)
-    totalpost=posts_count+reel_count
+    totalpost = posts_count + reel_count
+
     context = {
         'posts_paginator': posts_paginator,
         'profile': profile,
@@ -73,7 +78,7 @@ def UserProfile(request, username):
         'favourite': profile.favourite.all(),
         'posts_count': posts_count,
         'reel_count': reel_count,
-        'totalpost':totalpost,
+        'totalpost': totalpost,
         'following_count': following_count,
         'followers_count': followers_count,
         'follow_status': follow_status,
@@ -82,11 +87,13 @@ def UserProfile(request, username):
         'follow_status_list': {
             'following_users': following_users  # List of IDs that the request.user is following
         },
-        'statuses':statuses,
-        'user_statuses':user_statuses,
+        'statuses': statuses,
+        'user_statuses': user_statuses,
+        'highlights': highlights,  # Add highlights to the context
     }
 
     return render(request, 'profile.html', context)
+
 
 
 def follow(request, username, option):

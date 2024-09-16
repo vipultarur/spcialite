@@ -130,65 +130,36 @@
 
                             <div class="relative mt-5" tabindex="-1" uk-slider="autoplay: true;finite: true">
 
-                                <div class="overflow-hidden uk-slider-container py-10">
+                                <div class="overflow-hidden uk-slider-container p-10">
                                 
-                                <ul class="-ml-2 uk-slider-items w-[calc(100%+0.875rem)]" uk-scrollspy="target: > li; cls: uk-animation-slide-right-small; delay: 50" uk-lightbox="">
-                                    <li class="lg:w-1/5 sm:w-1/4 w-1/3 pr-3.5 max-lg:hidden" uk-scrollspy-class="uk-animation-fade">
-                                        <div class="flex flex-col items-center justify-center rounded-lg h-64 border-2 border-dashed border-teal-600">
-                                            <ion-icon name="add-circle" class="text-4xl text-teal-900"></ion-icon>
-                                            <div class="mt-1 font-semibold">Add New</div>
-                                        </div>
-                                    </li>  
-                                    <li class="lg:w-1/5 sm:w-1/4 w-1/3 pr-3.5">
-                                        <a href="assets/images/avatars/avatar-lg-1.jpg"  data-caption="Caption">
-                                            <div class=" lg:hover:scale-105 hover:shadow-lg hover:z-10 duration-500 delay-100">
-                                                <div class="w-full lg:h-64 aspect-[2.5/4] realtive">
-                                                    <img src="assets/images/avatars/avatar-lg-1.jpg" class="rounded-lg w-full h-full object-cover inset-0" alt="">
-                                                </div>  
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="lg:w-1/5 sm:w-1/4 w-1/3 pr-3.5">
-                                        <a href="assets/images/avatars/avatar-lg-2.jpg"  data-caption="Caption">
-                                            <div class=" lg:hover:scale-105 hover:shadow-lg hover:z-10 duration-500 delay-100">
-                                                <div class="w-full lg:h-64 aspect-[2.5/4] realtive">
-                                                    <img src="assets/images/avatars/avatar-lg-2.jpg" class="rounded-lg w-full h-full object-cover inset-0" alt="">
-                                                </div>  
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="lg:w-1/5 sm:w-1/4 w-1/3 pr-3.5">
-                                        <a href="assets/images/avatars/avatar-lg-3.jpg"  data-caption="Caption">
-                                            <div class=" lg:hover:scale-105 hover:shadow-lg hover:z-10 duration-500 delay-100">
-                                                <div class="w-full lg:h-64 aspect-[2.5/4] realtive">
-                                                    <img src="assets/images/avatars/avatar-lg-3.jpg" class="rounded-lg w-full h-full object-cover inset-0" alt="">
-                                                </div>  
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="lg:w-1/5 sm:w-1/4 w-1/3 pr-3.5">
-                                        <a href="assets/images/avatars/avatar-lg-4.jpg"  data-caption="Caption">
-                                            <div class=" lg:hover:scale-105 hover:shadow-lg hover:z-10 duration-500 delay-100">
-                                                <div class="w-full lg:h-64 aspect-[2.5/4] realtive">
-                                                    <img src="assets/images/avatars/avatar-lg-4.jpg" class="rounded-lg w-full h-full object-cover inset-0" alt="">
-                                                </div>  
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="lg:w-1/5 sm:w-1/4 w-1/3 pr-3.5">
-                                        <a href="assets/images/avatars/avatar-lg-5.jpg"  data-caption="Caption">
-                                            <div class=" lg:hover:scale-105 hover:shadow-lg hover:z-10 duration-500 delay-100">
-                                                <div class="w-full lg:h-64 aspect-[2.5/4] realtive">
-                                                    <img src="assets/images/avatars/avatar-lg-5.jpg" class="rounded-lg w-full h-full object-cover inset-0" alt="">
-                                                </div>  
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li class="lg:w-1/5 sm:w-1/4 w-1/3 pr-3.5">
-                                        <div class="w-full lg:h-64 aspect-[2.5/4] bg-slate-200/60 rounded-lg animate-pulse"></div>
-                                    </li>
-                                </ul>
-                            
+                                    <ul class="uk-slider-items w-[calc(100%+14px)]">
+                                        <!-- Loop through highlights -->
+                                        {% for highlight in highlights %}
+                                        <li class="md:pr-2.5 pr-2 hover:scale-[1.15] hover:-rotate-2 duration-300">
+                                            <a href="{% url 'highlight_detail' highlight.id %}" class="status-avatar" data-user-id="{{ highlight.user.id }}">
+                                                <div class="md:w-20 md:h-20 w-12 h-12 border-white relative md:border-4 rounded-full overflow-hidden dark:border-slate-700">
+                                                    {% if highlight.statuses.first.media.url %}
+                                                        <img src="{{ highlight.cover.url }}" alt="{{ highlight.title }}" class="shadow-inner absolute w-full h-full object-cover">
+                                                    {% else %}
+                                                        <img src="{% static 'images/default_profile.png' %}" alt="No media" class="absolute w-full h-full object-cover">
+                                                    {% endif %}
+                                                </div>
+                                                <span class="text-xs mt-1 text-center block">{{ highlight.title }}</span>
+                                            </a>
+                                        </li>
+                                        {% empty %}
+                                        {% endfor %}
+                                        {% if profile.user == request.user %}
+                                        <li class="md:pr-3">
+                                            <a href="{% url 'newhighlight' %}" class="md:w-20 md:h-20 w-12 h-12 rounded-full relative border-2 border-dashed grid place-items-center bg-slate-200 border-slate-300 dark:border-slate-700 dark:bg-dark2">
+                                                <ion-icon name="add" class="text-5xl"></ion-icon>
+                                            </a>
+                                            <span class="text-xs mt-1 text-center block bold">New</span>
+
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                    
                                 </div>
                             
                                 <button type="button" class="absolute -translate-y-1/2 bg-white rounded-full top-1/2 -left-4 grid w-9 h-9 place-items-center shadow  dark:bg-dark3" uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-2xl"></ion-icon></button>
@@ -203,14 +174,7 @@
 
                         <div class="mt-8">
 
-                            <!-- post heading -->
-                            <div class="flex items-center justify-between py-3">
-                                <h1 class="text-xl font-bold text-black dark:text-white">Posts</h1>
-
-                                <a href="#" class="text-sm font-semibold flex items-center gap-2">
-                                    Show acheived  <ion-icon name="chevron-forward-outline"></ion-icon> 
-                                </a>
-                            </div>
+                            
 
                             <!-- Post list -->
                             <div class="grid lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-3 mt-6"  uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100">

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="hidden lg:p-20 uk-modal uk-open" id="create-status" uk-modal="" style="overscroll-behavior: contain; display: block;" tabindex="-1">
+    <div class="hidden lg:p-20 uk-modal uk-open" id="create-status" uk-modal="" style="overscroll-behavior: contain; display: block;" tabindex="-1">
+    <form action="{% url 'newhighlight' %}" method="POST" enctype="multipart/form-data" class="uk-modal-dialog tt relative overflow-hidden mx-auto bg-white p-7 shadow-xl rounded-lg md:w-[520px] w-full dark:bg-dark2">
+        {% csrf_token %}
+        <div class="text-center py-3 border-b -m-7 mb-0 dark:border-slate-700">
+            <h2 class="text-sm font-medium"> Create Highlight </h2>
+
+            <!-- close button -->
+            <button type="button" class="button__ico absolute top-0 right-0 m-2.5 uk-modal-close">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="mt-7">
+            <!-- Stepper -->
+            <div class="flex items-center mb-5">
+                <div class="w-1/2">
+                    <div class="relative mb-2">
+                        <div class="w-10 h-10 mx-auto bg-blue-500 rounded-full text-lg text-white flex items-center">
+                            <span class="text-center text-white w-full">1</span>
+                        </div>
+                    </div>
+                    <div class="text-xs text-center md:text-base">Title</div>
+                </div>
+                <div class="w-1/2">
+                    <div class="relative mb-2">
+                        <div class="absolute flex align-center items-center align-middle content-center" style="width: calc(100% - 2.5rem - 1rem); top: 50%; transform: translate(-50%, -50%)">
+                            <div class="w-full bg-gray-200 rounded items-center align-middle align-center flex-1">
+                                <div class="w-0 bg-blue-300 py-1 rounded" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div class="w-10 h-10 mx-auto bg-white border-2 border-gray-200 rounded-full text-lg text-white flex items-center">
+                            <span class="text-center text-gray-600 w-full">2</span>
+                        </div>
+                    </div>
+                    <div class="text-xs text-center md:text-base">Select Stories</div>
+                </div>
+            </div>
+
+            <!-- Step 1: Title Input -->
+            <div id="step1" class="step">
+                <div class="mb-5"> 
+                    <label for="highlight-title" class="text-base">Highlight Title</label>
+                    <input type="text" id="highlight-title" name="title" class="w-full mt-3" required>
+                </div>
+                <div class="mb-5"> 
+                    <label for="highlight-cover" class="text-base">Highlight Cover</label>
+                    <input type="file" id="highlight-cover" name="cover" class="w-full mt-3" required>
+                </div>
+                <button type="button" class="button bg-blue-500 text-white px-8 mt-3" onclick="nextStep()">Next</button>
+            </div>
+
+            <!-- Step 2: Select Stories -->
+            <div id="step2" class="step hidden">
+                <div class="grid grid-cols-2 gap-4 mb-5">
+                    {% for story in stories %}
+                    <div class="uk-scrollspy-inview">
+                        <a href="#" class="group">
+                            <div class="relative overflow-hidden rounded-lg">
+                                <div class="relative w-full md:h-60 h-56 transition-all group-hover:scale-110 duration-300">
+                                    {% if story.media_type == 'image' %}
+                                        <img src="{{ story.media.url }}" alt="Story" class="object-cover w-full h-full inset-0">
+                                    {% elif story.media_type == 'video' %}
+                                        <video controls class="object-cover w-full h-full inset-0">
+                                            <source src="{{ story.media.url }}" type="video/mp4">
+                                        </video>
+                                    {% endif %}
+                                </div> 
+                            </div> 
+                        </a>
+                        
+                        <div class="mt-2">
+                            <input type="checkbox" name="selected_stories" value="{{ story.id }}" class="uk-checkbox">
+                            <label for="story_{{ story.id }}" class="ml-2">Select</label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="flex justify-between">
+                    <button type="button" class="button bg-gray-300 text-gray-700 px-8" onclick="prevStep()">Previous</button>
+                    <button type="submit" class="button bg-blue-500 text-white px-8">Create Highlight</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 2;
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                document.getElementById(`step${currentStep}`).classList.add('hidden');
+                currentStep++;
+                document.getElementById(`step${currentStep}`).classList.remove('hidden');
+                updateProgress();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                document.getElementById(`step${currentStep}`).classList.add('hidden');
+                currentStep--;
+                document.getElementById(`step${currentStep}`).classList.remove('hidden');
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.querySelector('.bg-blue-300').style.width = `${progress}%`;
+        }
+    </script>
+</div>
+
+
+</div>
+{% endblock %}

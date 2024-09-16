@@ -27,6 +27,8 @@ urlpatterns = [
     path('reel/<uuid:id>/', views.reeldetail, name='reeldetail'),
     path('<uuid:id>/reellike', views.reel_like, name='reellike'),
 
-    
+    path('highlight/<int:highlight_id>/', views.highlight_detail, name='highlight_detail'),
+    path('newhighlight/', views.create_highlight, name='newhighlight'),
+
 
 ]

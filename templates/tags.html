@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-2.5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
+{% comment %} <main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-2.5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
 
     <div class="box relative rounded-lg shadow-md">
 
@@ -73,5 +73,99 @@
     
     </div>
     
+</main> {% endcomment %}
+<main class="2xl:ml-[--w-side] xl:ml-[--w-side-md] md:ml-[--w-side-small]">
+
+    <div class="main__inner">
+        
+        <div uk-sticky="cls-active: bg-slate-100/60 z-30 backdrop-blur-lg px-4; start: 80; animation: uk-animation-slide-top" class="uk-sticky" style="">
+        
+            <!-- heading title -->
+            <div class="page__heading">
+                <div>
+                    <div class="flex relative md:w-20 md:h-20 w-12 h-12 shrink-0"> 
+    
+                        
+                        <label for="file" class=" flex cursor-pointer">
+                            <img id="img" src="{% static 'assets/image.png' %}" class="object-cover w-full h-full rounded-full" alt="">
+                            <input type="file" id="file" class="hidden">
+
+                            <div class="flex items-center md:gap-8 md:p-4" >
+                                <button class="inline-flex items-center gap-1 px-5 py-2 pl-2.5 pr-3 rounded-full bg-slate-50 border-2 border-slate-100 dark:text-white dark:bg-slate-700" type="button" aria-haspopup="true" aria-expanded="false"> 
+                                    <span class="font-medium text-sm"> #{{tag.title}} </span> 
+                                </button>
+                                <button class="inline-flex items-center gap-1 gap-1 px-5 py-2 pl-2.5 pr-3 rounded-full bg-slate-50 border-2 border-slate-100 dark:text-white dark:bg-slate-700" type="button" aria-haspopup="true" aria-expanded="false"> 
+                                    <span class="font-medium text-sm"> <b>{{posts_count}} </b></span> 
+                                    <span class="font-medium text-sm"> Post </span> 
+                                </button>
+                                
+                            </div>
+                        </label>
+    
+                       
+                        
+                    </div>
+                </div>           
+             </div>
+
+            <!-- tab style one -->
+            
+
+        </div><div class="uk-sticky-placeholder" style="height: 117.667px; width: 668.333px; margin: 0px;" hidden=""></div>
+
+        <div class="uk-switcher" id="market_tab" style="touch-action: pan-y pinch-zoom;">
+
+            <!-- product list -->
+            <div class="uk-active" style="">
+                
+                <div class="main__inner">
+
+
+                    <!-- search box -->
+                    <div class="z-10 p-5 max-lg:!top-10 lg:rounded-bl-2xl lg:rounded-br-2xl shadow-md bg-slate-100/60 backdrop-blur-3xl dark:bg-slate-800/60 uk-sticky invisible h-0" uk-sticky="cls-inactive: invisible h-0; start: 200; animation: uk-animation-slide-top">
+                       
+                        <div class="relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 absolute left-3 bottom-1/2 translate-y-1/2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
+                            </svg>
+                            <input type="text" placeholder="Search" class="!bg-white/20 w-full !pl-10 !py-2 border !border-gray-300 dark:!border-slate-500">
+                        </div>
+    
+                    </div><div class="uk-sticky-placeholder" hidden="" style="height: 40px; width: 668.333px; margin: 0px;"></div>
+    
+                   
+                    <div class="gallery -mt-16" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100">
+                        {% for post in posts %}
+                        <div class="gallery__card uk-scrollspy-inview " style="">
+                            <a href="{{post.get_absolute_url}}" uk-toggle="" aria-expanded="false"> 
+                                <div class="card__image">
+                                    <img src="{{post.picture.url}}" alt="{post.name}">
+                                </div>  
+                            </a>
+                        </div>
+                        {% endfor %}
+                    
+                       
+     
+    
+                    </div>
+    
+    
+                </div>
+
+                <!-- product list  -->
+                <div class="grid xl:grid-cols-4 md:grid-cols-3 grid-cols-2 gap-3 mt-2" uk-scrollspy="target: > div; cls: uk-animation-slide-bottom-small; delay: 100">
+ 
+                </div>
+
+            </div>
+            
+
+        </div>
+
+
+    </div>
+
+
 </main>
 {% endblock %}

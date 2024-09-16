@@ -21,3 +21,4 @@ class NewReelForm(forms.ModelForm):
     class Meta:
         model = Reel
         fields = ['video', 'caption', 'tags','thumbnail']
+
